@@ -195,3 +195,6 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/clion,c++,opencv,linux,macos,windows,c
+
+bin/
+cmake-build-debug/

@@ -1,39 +1,71 @@
-#include "opencv2/imgcodecs.hpp"
-#include "opencv2/highgui/highgui.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
-#include <iostream>
+#include <thread>
+#include "include/ProccesImage.h"
 
 using namespace cv;
-using namespace std;
+using namespace Group5;
 
-static void help() {
-    cout << "\nThis program demonstrates circle finding with the Hough transform.\n"
-            "Usage:\n"
-            "./houghcircles <image_name>, Default is ../data/board.jpg\n" << endl;
-}
+bool search = true;
+bool isClientConnected = false;
 
-int main(int argc, char **argv) {
-    cv::CommandLineParser parser(argc, argv,
-                                 "{help h ||}{@image|../data/board.jpg|}"
-    );
-    if (parser.has("help")) {
-        help();
-        return 0;
-    }
-    string filename = parser.get<string>("@image");
-    if (filename.empty()) {
-        help();
-        cout << "no image_name provided" << endl;
-        return -1;
-    }
-    Mat img = imread(filename, 0);
-    if (img.empty()) {
-        help();
-        cout << "can not open " << filename << endl;
-        return -1;
-    }
 
-    imshow("detected circles", img);
-    waitKey();
+int main() {
+
+    //std::cerr<<"1"<<std::endl;
+    SearchAli& ali = SearchAli::getInstance();
+
+    ali.openCamera();
+
+    std::thread takePhotoThread(&SearchAli::takeImage, &ali);
+    //TODO  iki threadin senkronizasyonu mühim..
+    //std::thread proccesFrameThread();
+
+    while (search){
+        std::cerr<<"lololo"<<std::endl;
+        //Decide way
+        //Send picture to computer.
+        //
+    }
+    ali.setTakeImageFlag(false);
+    takePhotoThread.join();
+
+
+
+
+
+
+/*
+    Mat edges;
+    edges = imread("/home/sveyda/Desktop/pic.jpg", IMREAD_GRAYSCALE);
+    namedWindow("edges", 1);
+
+    //  Mat frame;
+    //  cap >> frame; // get a new frame from camera
+    //    cvtColor(frame, edges, CV_BGR2GRAY);
+    GaussianBlur(edges, edges, Size(7, 7), 1.5, 1.5);
+
+    Canny(edges, edges, 0, 50, 3);
+
+    imshow("edges", edges);
+    imwrite("/home/sveyda/Desktop/pic.jpg", edges);
+    // if(waitKey(30) >= 0) break;
+
+*/
+
     return 0;
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
