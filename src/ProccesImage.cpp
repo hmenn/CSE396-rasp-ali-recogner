@@ -41,8 +41,6 @@ std::string SearchAli::sendCoordinate() {
 };
 
 
-
-
 /**
  * @return Found flag ali bulundumu bulunmadi mi
  */

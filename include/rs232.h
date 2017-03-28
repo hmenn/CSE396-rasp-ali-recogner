@@ -39,11 +39,6 @@ extern "C" {
 
 #include <stdio.h>
 #include <string.h>
-
-
-
-#if defined(__linux__) || defined(__FreeBSD__)
-
 #include <termios.h>
 #include <sys/ioctl.h>
 #include <unistd.h>
@@ -54,11 +49,8 @@ extern "C" {
 #include <sys/file.h>
 #include <errno.h>
 
-#else
 
-#include <windows.h>
 
-#endif
 
 int RS232_OpenComport(int, int, const char *);
 int RS232_PollComport(int, unsigned char *, int);

@@ -13,9 +13,8 @@ set(CMAKE_CXX_STANDARD 11)
 #TODO daha sonra bunu kullababiliriz.
 #file(GLOB SRCS include/*.h src/*.cpp )
 
-set(SOURCE_FILES main.cpp src/ProccesImage.cpp)
+set(SOURCE_FILES main.cpp src/ProccesImage.cpp src/Communication.cpp include/Communication.h)
 
 add_executable(FindStickman ${SOURCE_FILES})
-
 
 target_link_libraries(FindStickman ${OpenCV_LIBS})

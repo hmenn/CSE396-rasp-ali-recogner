@@ -6,6 +6,7 @@ using namespace Group5;
 
 bool search = true;
 bool isClientConnected = false;
+bool isArduinoConnected = false;
 
 
 int main() {
@@ -27,11 +28,6 @@ int main() {
     }
     ali.setTakeImageFlag(false);
     takePhotoThread.join();
-
-
-
-
-
 
 /*
     Mat edges;
