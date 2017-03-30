@@ -38,8 +38,8 @@
 				</MakeCommands>
 			</Target>
 			<Target title="CSE396_rasp_ali_recogner">
-				<Option output="/home/hmenn/Workspace/CSE396_Proje2/CSE396-rasp-ali-recogner/cmake-build-debug/CSE396_rasp_ali_recogner" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/hmenn/Workspace/CSE396_Proje2/CSE396-rasp-ali-recogner/cmake-build-debug"/>
+				<Option output="/home/hmenn/Workspace/CSE396_Proje2/CSE396-rasp-ali-recogner/bin/CSE396_rasp_ali_recogner" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="../bin"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -62,8 +62,8 @@
 				</MakeCommands>
 			</Target>
 			<Target title="CSE396_rasp_ali_recogner/fast">
-				<Option output="/home/hmenn/Workspace/CSE396_Proje2/CSE396-rasp-ali-recogner/cmake-build-debug/CSE396_rasp_ali_recogner" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/hmenn/Workspace/CSE396_Proje2/CSE396-rasp-ali-recogner/cmake-build-debug"/>
+				<Option output="/home/hmenn/Workspace/CSE396_Proje2/CSE396-rasp-ali-recogner/bin/CSE396_rasp_ali_recogner" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="../bin"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -86,7 +86,16 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/home/hmenn/Workspace/CSE396_Proje2/CSE396-rasp-ali-recogner/include/Communication.h">
+			<Option target="CSE396_rasp_ali_recogner"/>
+		</Unit>
 		<Unit filename="/home/hmenn/Workspace/CSE396_Proje2/CSE396-rasp-ali-recogner/main.cpp">
+			<Option target="CSE396_rasp_ali_recogner"/>
+		</Unit>
+		<Unit filename="/home/hmenn/Workspace/CSE396_Proje2/CSE396-rasp-ali-recogner/src/Communication.cpp">
+			<Option target="CSE396_rasp_ali_recogner"/>
+		</Unit>
+		<Unit filename="/home/hmenn/Workspace/CSE396_Proje2/CSE396-rasp-ali-recogner/src/ProccesImage.cpp">
 			<Option target="CSE396_rasp_ali_recogner"/>
 		</Unit>
 		<Unit filename="/home/hmenn/Workspace/CSE396_Proje2/CSE396-rasp-ali-recogner/CMakeLists.txt">

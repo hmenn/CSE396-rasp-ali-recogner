@@ -39,7 +39,7 @@ class CommunicationWithArduino{
     private:
         int port_number = 24;
         int baud_rate = 9600;
-        char mode[]={'8','N','1',0};
+        char mode[4]={'8','N','1','0'};
         bool  isConnected = false;
 
 };

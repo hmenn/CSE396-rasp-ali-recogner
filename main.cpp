@@ -8,7 +8,6 @@ bool search = true;
 bool isClientConnected = false;
 bool isArduinoConnected = false;
 
-
 int main() {
 
     //std::cerr<<"1"<<std::endl;
@@ -29,26 +28,7 @@ int main() {
     ali.setTakeImageFlag(false);
     takePhotoThread.join();
 
-/*
-    Mat edges;
-    edges = imread("/home/sveyda/Desktop/pic.jpg", IMREAD_GRAYSCALE);
-    namedWindow("edges", 1);
-
-    //  Mat frame;
-    //  cap >> frame; // get a new frame from camera
-    //    cvtColor(frame, edges, CV_BGR2GRAY);
-    GaussianBlur(edges, edges, Size(7, 7), 1.5, 1.5);
-
-    Canny(edges, edges, 0, 50, 3);
-
-    imshow("edges", edges);
-    imwrite("/home/sveyda/Desktop/pic.jpg", edges);
-    // if(waitKey(30) >= 0) break;
-
-*/
-
     return 0;
-
 }
 
 
