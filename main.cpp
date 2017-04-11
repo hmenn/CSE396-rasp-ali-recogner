@@ -1,7 +1,10 @@
 #include <thread>
+#include "include/Requirements.h"
 #include "include/ProccesImage.h"
+#include "include/ConnectionHelper.h"
 
 using namespace cv;
+using namespace std;
 using namespace Group5;
 
 bool search = true;
@@ -10,6 +13,20 @@ bool isArduinoConnected = false;
 
 int main() {
 
+
+  try{
+
+    ConnectionHelper connectionHelper;
+    //connectionHelper.openArdConnection();
+
+  }catch(exception &e){
+
+  }
+
+
+
+  // TODO: will be updated
+/*
     //std::cerr<<"1"<<std::endl;
     SearchAli& ali = SearchAli::getInstance();
 
@@ -27,7 +44,7 @@ int main() {
     }
     ali.setTakeImageFlag(false);
     takePhotoThread.join();
-
+*/
     return 0;
 }
 
