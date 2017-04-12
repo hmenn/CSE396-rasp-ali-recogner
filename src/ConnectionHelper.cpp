@@ -40,12 +40,24 @@ ConnectionHelper::ConnectionHelper(){
   printf("ConnectionHelper constucted. Port:%d now available.\n",Constants::PORT);
 }
 
-char* ConnectionHelper::listenPort(){
+void ConnectionHelper::listenPort(){
   char buffer[250];
   bzero(buffer,250);
   read(socketfd,buffer,250);
   printf("Receive: %s\n",buffer);
-  return buffer;
+}
+
+
+void ConnectionHelper::writePort(){
+  char buffer[250];
+  int size=0;
+  bzero(buffer,250);
+  sprintf(buffer,"Test");
+  if((size = write(socketfd,buffer,strlen(buffer)))<0){
+    perror("write socket");
+    throw InvalidConnectionException();
+  }
+  printf("Write completed:%d\n",size);
 }
 
 ConnectionHelper::~ConnectionHelper(){

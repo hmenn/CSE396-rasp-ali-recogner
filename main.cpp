@@ -17,6 +17,8 @@ int main() {
   try{
 
     ConnectionHelper connectionHelper;
+    connectionHelper.listenPort();
+    connectionHelper.writePort();
     //connectionHelper.openArdConnection();
 
   }catch(exception &e){

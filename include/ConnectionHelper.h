@@ -14,7 +14,8 @@ class ConnectionHelper {
 public:
     ConnectionHelper();
     ~ConnectionHelper();
-    char *listenPort();
+    void listenPort();
+    void writePort();
     void startRemoteServer();
     void openArdConnection();
     bool state=false;
