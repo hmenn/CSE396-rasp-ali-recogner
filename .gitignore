@@ -2,6 +2,14 @@
 # Created by https://www.gitignore.io/api/clion,c++,opencv,linux,macos,windows,c
 
 CMakeFiles
+bin/
+cmake-build-debug/
+CMakeCache.txt
+CMakeFiles/
+CSE396_rasp_ali_recogner.cbp
+Makefile
+cmake_install.cmake
+
 
 ### C ###
 # Prerequisites
@@ -198,10 +206,3 @@ $RECYCLE.BIN/
 
 # End of https://www.gitignore.io/api/clion,c++,opencv,linux,macos,windows,c
 
-bin/
-cmake-build-debug/
-CMakeCache.txt
-CMakeFiles/
-CSE396_rasp_ali_recogner.cbp
-Makefile
-cmake_install.cmake
