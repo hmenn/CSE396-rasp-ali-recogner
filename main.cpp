@@ -20,12 +20,10 @@ int main() {
   try{
 
     pthread_create(&thServer,NULL,serverJobs,NULL);
-    fprintf(stdout,"Server thread created.\n");
+    fprintf(LOG_FD,"Server thread created.\n");
 
     // vision operations
     // arduino connections
-
-
 
     //  connectionHelper.writePort();
     //connectionHelper.openArdConnection();

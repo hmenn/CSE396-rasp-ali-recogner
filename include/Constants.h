@@ -16,9 +16,11 @@ public:
 
     /* Messages */
     static const char DELIMITER=',';
-
+    static const char COMMAND_MSG_SIZE=10;
 
     static const int MAX_BUFFER=255;
+    static const int MIN_BUFFER=25;
+
 
     /*Connection*/
     static const int PORT=3965;

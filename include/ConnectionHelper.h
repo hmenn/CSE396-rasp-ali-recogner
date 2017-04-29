@@ -14,11 +14,13 @@ class ConnectionHelper {
 public:
     ConnectionHelper();
     ~ConnectionHelper();
-    void listenPort();
-    void writePort(const char *msg);
+
+    char *readSocket(int byte);
+    int writeSocket(const char *msg);
     void startRemoteServer();
     void openArdConnection();
     bool state=false;
+    int getSocketFD() const;
 private:
     int serverfd;
     int socketfd;

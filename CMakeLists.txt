@@ -8,7 +8,7 @@ set(SOURCE_FILES main.cpp)
 #set(INCLUDE ./include/Communication.h ./include/ProccesImage.h ./include/rs232.h)
 #set(SRC ./src/Communication.cpp ./src/ProccesImage.cpp ./src/rs232.c)
 
-file(GLOB SOURCE_FILE "./include/*.h"  "./src/*.c*" )
+file(GLOB SOURCE_FILE "./include/*.h"  "./src/*.c*")
 
 find_package(Threads)
 

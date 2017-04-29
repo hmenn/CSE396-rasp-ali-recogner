@@ -7,73 +7,72 @@
 #include "../include/Requirements.h"
 
 
-ConnectionHelper::ConnectionHelper(){
+ConnectionHelper::ConnectionHelper() {
 
-  serverfd = socket(AF_INET,SOCK_STREAM,0);
-  if(serverfd<0){
+  serverfd = socket(AF_INET, SOCK_STREAM, 0);
+  if (serverfd < 0) {
     throw SocketCreationException(CREATE_ERROR);
   }
 
-  bzero((char*)&serv_addr,sizeof(serv_addr));
-  serv_addr.sin_family=AF_INET;
-  serv_addr.sin_port=htons(Constants::PORT);
-  serv_addr.sin_addr.s_addr=INADDR_ANY;
+  bzero((char *) &serv_addr, sizeof(serv_addr));
+  serv_addr.sin_family = AF_INET;
+  serv_addr.sin_port = htons(Constants::PORT);
+  serv_addr.sin_addr.s_addr = INADDR_ANY;
 
-  if(bind(serverfd,(struct sockaddr *)&serv_addr,sizeof(serv_addr))<0){
+  if (bind(serverfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr)) < 0) {
     throw SocketCreationException(BINDING_ERROR);
   }
 
-  if(listen(serverfd,3)<0){
+  if (listen(serverfd, 3) < 0) {
     throw SocketCreationException(LISTEN_ERROR);
   }
 
-  int socklen=sizeof(serv_addr);
+  int socklen = sizeof(serv_addr);
 
-  if((socketfd=accept(serverfd,(struct sockaddr*)&serv_addr,(socklen_t*)&socklen))<0){
+  if ((socketfd = accept(serverfd, (struct sockaddr *) &serv_addr, (socklen_t *) &socklen)) < 0) {
     throw SocketCreationException(ACCEPT_ERROR);
   }
 
-  fprintf(LOG_FD,"ConnectionHelper constucted. Port:%d now available.\n",Constants::PORT);
+  fprintf(LOG_FD, "ConnectionHelper constucted. Port:%d now available.\n", Constants::PORT);
 }
 
-void ConnectionHelper::listenPort(){
-  char buffer[250];
+char *ConnectionHelper::readSocket(int byte) {
 
-  printf("Started to listen port\n");
-  while(1){
-    bzero(buffer,250);
-    int size = read(socketfd,buffer,250);
-    printf("%d",size);
-    if(size>0){
-      printf("Receive: %s\n",buffer);
-      writePort("ok");
-    }else{
-      break;
-    }
+  char *buffer = (char *) calloc(sizeof(char), byte);
 
+  int size = read(socketfd, buffer, byte);
+
+  if (size > 0) {
+    return buffer;
   }
+
+  return NULL;
 }
 
-void ConnectionHelper::writePort(const char *msg){
+int ConnectionHelper::writeSocket(const char *msg) {
   int size;
-  if((size = write(socketfd,msg,strlen(msg)))<0){
+  if ((size = write(socketfd, msg, strlen(msg))) < 0) {
     perror("write socket");
     throw InvalidConnectionException();
   }
-  printf("Write completed:%d\n",size);
+  return size;
 }
 
-ConnectionHelper::~ConnectionHelper(){
+ConnectionHelper::~ConnectionHelper() {
   char buffer[250];
-  bzero(buffer,250);
+  bzero(buffer, 250);
 
-  while (read(socketfd,buffer,Constants::MAX_BUFFER) > 0){
-    printf("FreeSocket Read:%s\n",buffer);
-    bzero(buffer,250);
+  while (read(socketfd, buffer, Constants::MAX_BUFFER) > 0) {
+    printf("FreeSocket Read:%s\n", buffer);
+    bzero(buffer, 250);
   } // free socket
   //shutdown(socketfd,SHUT_RDWR);
   //shutdown(serverfd,SHUT_RDWR);
   close(socketfd);
   close(serverfd);
-  printf("Socket-Port:%d closed.",Constants::PORT);
+  printf("Socket-Port:%d closed.", Constants::PORT);
+}
+
+int ConnectionHelper::getSocketFD() const {
+  return socketfd;
 }
