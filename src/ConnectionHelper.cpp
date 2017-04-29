@@ -11,49 +11,52 @@ ConnectionHelper::ConnectionHelper(){
 
   serverfd = socket(AF_INET,SOCK_STREAM,0);
   if(serverfd<0){
-    perror("Socket create");
-    throw SocketCreationException();
+    throw SocketCreationException(CREATE_ERROR);
   }
 
   bzero((char*)&serv_addr,sizeof(serv_addr));
-
   serv_addr.sin_family=AF_INET;
   serv_addr.sin_port=htons(Constants::PORT);
   serv_addr.sin_addr.s_addr=INADDR_ANY;
 
   if(bind(serverfd,(struct sockaddr *)&serv_addr,sizeof(serv_addr))<0){
-    perror("Socket bind");
-    throw SocketCreationException();
+    throw SocketCreationException(BINDING_ERROR);
   }
 
   if(listen(serverfd,3)<0){
-    perror("Socket listen");
-    throw SocketCreationException();
+    throw SocketCreationException(LISTEN_ERROR);
   }
 
   int socklen=sizeof(serv_addr);
+
   if((socketfd=accept(serverfd,(struct sockaddr*)&serv_addr,(socklen_t*)&socklen))<0){
-    perror("Socket accept");
-    throw SocketCreationException();
+    throw SocketCreationException(ACCEPT_ERROR);
   }
 
-  printf("ConnectionHelper constucted. Port:%d now available.\n",Constants::PORT);
+  fprintf(LOG_FD,"ConnectionHelper constucted. Port:%d now available.\n",Constants::PORT);
 }
 
 void ConnectionHelper::listenPort(){
   char buffer[250];
-  bzero(buffer,250);
-  read(socketfd,buffer,250);
-  printf("Receive: %s\n",buffer);
+
+  printf("Started to listen port\n");
+  while(1){
+    bzero(buffer,250);
+    int size = read(socketfd,buffer,250);
+    printf("%d",size);
+    if(size>0){
+      printf("Receive: %s\n",buffer);
+      writePort("ok");
+    }else{
+      break;
+    }
+
+  }
 }
 
-
-void ConnectionHelper::writePort(){
-  char buffer[250];
-  int size=0;
-  bzero(buffer,250);
-  sprintf(buffer,"Test");
-  if((size = write(socketfd,buffer,strlen(buffer)))<0){
+void ConnectionHelper::writePort(const char *msg){
+  int size;
+  if((size = write(socketfd,msg,strlen(msg)))<0){
     perror("write socket");
     throw InvalidConnectionException();
   }
@@ -63,7 +66,11 @@ void ConnectionHelper::writePort(){
 ConnectionHelper::~ConnectionHelper(){
   char buffer[250];
   bzero(buffer,250);
-  while (read(socketfd,buffer,250) > 0); // free socket
+
+  while (read(socketfd,buffer,Constants::MAX_BUFFER) > 0){
+    printf("FreeSocket Read:%s\n",buffer);
+    bzero(buffer,250);
+  } // free socket
   //shutdown(socketfd,SHUT_RDWR);
   //shutdown(serverfd,SHUT_RDWR);
   close(socketfd);

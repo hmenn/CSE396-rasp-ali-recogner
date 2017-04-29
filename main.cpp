@@ -13,15 +13,15 @@ bool isArduinoConnected = false;
 
 int main() {
 
-
   try{
 
     ConnectionHelper connectionHelper;
     connectionHelper.listenPort();
-    connectionHelper.writePort();
+  //  connectionHelper.writePort();
     //connectionHelper.openArdConnection();
 
   }catch(exception &e){
+    cout<<e.what();
 
   }
 

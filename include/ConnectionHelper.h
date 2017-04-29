@@ -15,7 +15,7 @@ public:
     ConnectionHelper();
     ~ConnectionHelper();
     void listenPort();
-    void writePort();
+    void writePort(const char *msg);
     void startRemoteServer();
     void openArdConnection();
     bool state=false;

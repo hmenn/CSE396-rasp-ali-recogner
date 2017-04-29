@@ -10,5 +10,6 @@
 #include "Exceptions396.h"
 #include "Constants.h"
 
+#define LOG_FD stdout
 
 #endif

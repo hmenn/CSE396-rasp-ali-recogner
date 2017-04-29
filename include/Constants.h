@@ -17,6 +17,9 @@ public:
     /* Messages */
     static const char DELIMITER=',';
 
+
+    static const int MAX_BUFFER=255;
+
     /*Connection*/
     static const int PORT=3965;
 };
