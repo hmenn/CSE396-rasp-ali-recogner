@@ -21,19 +21,23 @@ int main() {
 
    // pthread_create(&thServer,NULL,serverJobs,NULL);
     //fprintf(LOG_FD,"Server thread created.\n");
-    char buf[50];
-      sprintf(buf,"alperen!!!");
+
     // vision operations
     // arduino connections
-    arduino myArduino(25,9600);
+    arduino myArduino(24,115200);
       myArduino.connect();
-    RS232_enableRTS(25);
+      int i=0;
+      while(1) {
+          if(i%3==0)
+          myArduino.step(500,200);
+          else
+              myArduino.step(-200,-200);
+          ++i;
 
-      myArduino.sendBuf((unsigned char*)buf,50);
-
-    while(RS232_IsDCDEnabled(25));
-
+      }
       myArduino.disconnect();
+
+
     //  connectionHelper.writePort();
     //connectionHelper.openArdConnection();
 

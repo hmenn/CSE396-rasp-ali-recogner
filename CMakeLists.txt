@@ -14,7 +14,7 @@ find_package(Threads)
 
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})
-add_executable( CSE396_rasp_ali_recogner main.cpp ${SOURCE_FILE})
+add_executable( CSE396_rasp_ali_recogner main.cpp ${SOURCE_FILE} include/arduino.h src/arduino.cpp)
 
 target_link_libraries(CSE396_rasp_ali_recogner ${OpenCV_LIBS})
 target_link_libraries (CSE396_rasp_ali_recogner ${CMAKE_THREAD_LIBS_INIT})
