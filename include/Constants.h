@@ -22,6 +22,7 @@ public:
 
     /*Connection*/
     static const int PORT=3965;
+
 };
 
 #endif // CONSTANTS_H
