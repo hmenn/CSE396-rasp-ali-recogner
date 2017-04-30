@@ -5,6 +5,11 @@
 #ifndef CSE396_RASP_ALI_RECOGNER_SERVERTHREAD_H
 #define CSE396_RASP_ALI_RECOGNER_SERVERTHREAD_H
 
+#include "arduino.h"
+
 void* serverJobs(void *args);
+
+
+
 
 #endif //CSE396_RASP_ALI_RECOGNER_SERVERTHREAD_H

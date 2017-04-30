@@ -8,28 +8,28 @@ using namespace cv;
 using namespace std;
 using namespace Group5;
 
-bool search = true;
-bool isClientConnected = false;
-bool isArduinoConnected = false;
 
 pthread_t thServer;
 pthread_mutex_t mtxServer;
-
+arduino *myArduino;
 
 int main() {
 
   try{
+    myArduino = new arduino(16,115200);
+    myArduino->connect();
+    pthread_create(&thServer,NULL,serverJobs,myArduino);
 
-    pthread_create(&thServer,NULL,serverJobs,NULL);
+
+
+    // vision operations
+    // arduino connections
 
     while(1){
 
     }
-    // vision operations
-    // arduino connections
-    arduino myArduino(24,115200);
-      myArduino.connect();
-      int i=0;
+
+     /* int i=0;
       while(1) {
           if(i%3==0)
           myArduino.step(500,200);
@@ -37,8 +37,8 @@ int main() {
               myArduino.step(-200,-200);
           ++i;
 
-      }
-      myArduino.disconnect();
+      }*/
+      myArduino->disconnect();
 
 
     //  connectionHelper.writePort();

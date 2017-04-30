@@ -5,6 +5,8 @@
 #include "../include/ServerThread.h"
 #include "../include/ConnectionHelper.h"
 #include "../include/Requirements.h"
+#include "../include/arduino.h"
+
 
 void *serverJobs(void *args) {
 
@@ -15,10 +17,12 @@ void *serverJobs(void *args) {
   int tempI;
   char tempCh;
   int XStep, YStep;
+  arduino *myArduino = (arduino *)args;
 
   fprintf(LOG_FD, "Thread started.");
 
   ConnectionHelper connectionHelper;
+
 
   try {
 
@@ -32,7 +36,7 @@ void *serverJobs(void *args) {
         msg = connectionHelper.readSocket(Constants::COMMAND_MSG_SIZE);
         sscanf(msg, "%d", &command);
 
-        fprintf(LOG_FD, "Command:%d\n", command);
+        fprintf(LOG_FD, "Readded command from socket:%d\n", command);
         switch (command) {
           case Constants::REQ_CLOSE_CONNECTION: {
             connectionHelper.releaseConnection();
@@ -45,14 +49,27 @@ void *serverJobs(void *args) {
             break;
           }
           case Constants::REQ_ASK_CURRENT_COORDS: {
-            int size = connectionHelper.writeSocket("2 3");
-            fprintf(LOG_FD, "Write:%d\n", size);
+            int x=myArduino->getX();
+            int y=myArduino->getY();
+            char buffer[Constants::MIN_BUFFER_SIZE];
+            sprintf(buffer,"%d %d",x,y);
+            int size = connectionHelper.writeSocket(buffer);
+            fprintf(LOG_FD, "SocketWriteSize:%d\n", size);
             break;
           }
           case Constants::REQ_UPDATE_COORDS: {
             sscanf(msg, "%d%c%d%c%d", &tempI, &tempCh, &XStep, &tempCh, &YStep);
-            printf("Read X:%d, Y:%d\n", XStep, YStep);
+            printf("Update X:%d, Y:%d\n", XStep, YStep);
+            myArduino->step(XStep,YStep);
             connectionHelper.writeSocket("OK");
+            break;
+          }case Constants::REQ_MANUAL_MODE: {
+            int mode;
+            sscanf(msg, "%d%c%d", &tempI,&tempCh,&mode);
+            if(mode) fprintf(LOG_FD,"Manual mode opened!\n");
+            else fprintf(LOG_FD,"Manual mode closed!\n");
+            connectionHelper.writeSocket("OK");
+            // CLOSE ARDUINO CONTROL FROM IMAGE PROCESS
             break;
           }
           default: {

@@ -15,7 +15,7 @@ arduino::~arduino() {
 bool arduino::connect() {
     if(RS232_OpenComport(port, baudRate, mode)){
         std::cerr<<"Arduino can not connected\n";
-        connected=false;
+        return connected=false;
     }
     std::cerr<<"Arduino connected\n";
         connected=true;

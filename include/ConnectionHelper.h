@@ -8,6 +8,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include "arduino.h"
 
 class ConnectionHelper {
 
@@ -24,6 +25,7 @@ public:
     bool state=false;
     int getSocketFD() const;
 private:
+
     int serverfd;
     int socketfd;
     int clielen; // size of client address
