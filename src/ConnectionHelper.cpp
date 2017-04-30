@@ -27,13 +27,32 @@ ConnectionHelper::ConnectionHelper() {
     throw SocketCreationException(LISTEN_ERROR);
   }
 
+  fprintf(LOG_FD, "ConnectionHelper constucted. Port:%d now available.\n", Constants::PORT);
+}
+
+int ConnectionHelper::acceptConnection(){
+
   int socklen = sizeof(serv_addr);
 
   if ((socketfd = accept(serverfd, (struct sockaddr *) &serv_addr, (socklen_t *) &socklen)) < 0) {
     throw SocketCreationException(ACCEPT_ERROR);
   }
 
-  fprintf(LOG_FD, "ConnectionHelper constucted. Port:%d now available.\n", Constants::PORT);
+  return socketfd;
+
+}
+
+void ConnectionHelper::releaseConnection() {
+  char buffer[Constants::MAX_BUFFER_SIZE];
+ /* while (read(socketfd, buffer, Constants::MAX_BUFFER_SIZE) > 0) {
+    printf("FreeSocket Read:%s\n", buffer);
+    bzero(buffer, 250);
+  } // free socket*/
+  close(socketfd);
+  sleep(1);
+  //shutdown(socketfd,SHUT_RDWR);
+  fprintf(LOG_FD,"Connection released!\n");
+
 }
 
 char *ConnectionHelper::readSocket(int byte) {
@@ -62,15 +81,12 @@ ConnectionHelper::~ConnectionHelper() {
   char buffer[250];
   bzero(buffer, 250);
 
-  while (read(socketfd, buffer, Constants::MAX_BUFFER) > 0) {
-    printf("FreeSocket Read:%s\n", buffer);
-    bzero(buffer, 250);
-  } // free socket
   //shutdown(socketfd,SHUT_RDWR);
   //shutdown(serverfd,SHUT_RDWR);
-  close(socketfd);
+  //close(socketfd);
   close(serverfd);
   printf("Socket-Port:%d closed.", Constants::PORT);
+  sleep(1);
 }
 
 int ConnectionHelper::getSocketFD() const {

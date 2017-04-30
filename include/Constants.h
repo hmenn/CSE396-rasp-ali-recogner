@@ -18,8 +18,8 @@ public:
     static const char DELIMITER=',';
     static const char COMMAND_MSG_SIZE=10;
 
-    static const int MAX_BUFFER=255;
-    static const int MIN_BUFFER=25;
+    static const int MAX_BUFFER_SIZE=255;
+    static const int MIN_BUFFER_SIZE=25;
 
 
     /*Connection*/

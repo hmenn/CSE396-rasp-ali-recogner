@@ -15,13 +15,16 @@ bool isArduinoConnected = false;
 pthread_t thServer;
 pthread_mutex_t mtxServer;
 
+
 int main() {
 
   try{
 
     pthread_create(&thServer,NULL,serverJobs,NULL);
-    fprintf(LOG_FD,"Server thread created.\n");
 
+    while(1){
+
+    }
     // vision operations
     // arduino connections
 

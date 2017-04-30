@@ -17,6 +17,8 @@ public:
 
     char *readSocket(int byte);
     int writeSocket(const char *msg);
+    int acceptConnection();
+    void releaseConnection();
     void startRemoteServer();
     void openArdConnection();
     bool state=false;
