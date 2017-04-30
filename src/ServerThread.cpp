@@ -36,7 +36,7 @@ void *serverJobs(void *args) {
         msg = connectionHelper.readSocket(Constants::COMMAND_MSG_SIZE);
         sscanf(msg, "%d", &command);
 
-        fprintf(LOG_FD, "Readded command from socket:%d\n", command);
+        fprintf(LOG_FD, "-->Command:%d\n", command);
         switch (command) {
           case Constants::REQ_CLOSE_CONNECTION: {
             connectionHelper.releaseConnection();
@@ -60,8 +60,9 @@ void *serverJobs(void *args) {
           case Constants::REQ_UPDATE_COORDS: {
             sscanf(msg, "%d%c%d%c%d", &tempI, &tempCh, &XStep, &tempCh, &YStep);
             printf("Update X:%d, Y:%d\n", XStep, YStep);
-            myArduino->step(XStep,YStep);
             connectionHelper.writeSocket("OK");
+            myArduino->step(XStep,YStep);
+
             break;
           }case Constants::REQ_MANUAL_MODE: {
             int mode;

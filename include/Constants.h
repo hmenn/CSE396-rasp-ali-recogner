@@ -17,7 +17,7 @@ public:
 
     /* Messages */
     static const char DELIMITER=',';
-    static const char COMMAND_MSG_SIZE=10;
+    static const char COMMAND_MSG_SIZE=20;
 
     static const int MAX_BUFFER_SIZE=255;
     static const int MIN_BUFFER_SIZE=25;
