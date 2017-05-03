@@ -27,13 +27,19 @@ void arduino::disconnect() {
     connected=false;
 }
 int arduino::sendByte(unsigned char byte) {
-    return RS232_SendByte(port,byte);
+    int returnV = RS232_SendByte(port,byte);
+    usleep(1102000);
+    return returnV;
 }
 int arduino::sendBuf(unsigned char *buf, int size) {
-    return RS232_SendBuf(port,buf,size);
+    int returnV = RS232_SendBuf(port,buf,size);
+    usleep(1102000);
+    return returnV;
 }
 void arduino::sendBuf(const char *buf) {
-     RS232_cputs(port,buf);
+    RS232_cputs(port,buf);
+    usleep(1102000);
+    return;
 }
 int arduino::receive(unsigned char *buf, int size) {
     return RS232_PollComport(port,buf,size);
