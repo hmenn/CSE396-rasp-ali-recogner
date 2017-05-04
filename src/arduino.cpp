@@ -33,12 +33,12 @@ int arduino::sendByte(unsigned char byte) {
 }
 int arduino::sendBuf(unsigned char *buf, int size) {
     int returnV = RS232_SendBuf(port,buf,size);
-    usleep(1102000);
+    //usleep(1102000);
     return returnV;
 }
 void arduino::sendBuf(const char *buf) {
     RS232_cputs(port,buf);
-    usleep(1102000);
+    //usleep(1102000);
     return;
 }
 int arduino::receive(unsigned char *buf, int size) {
@@ -142,5 +142,5 @@ void arduino::step(int xStep, int yStep) {
     }
     sprintf(buffer,"X=%d,Y=%d",xStep,yStep);
     sendBuf((unsigned char*)buffer,strlen(buffer));
-    usleep(1102000);
+    //usleep(1102000);
 }
