@@ -95,6 +95,9 @@
 		<Unit filename="/home/cybersecurity/Workspace/CSE396-rasp-ali-recogner/include/Exceptions396.h">
 			<Option target="CSE396_rasp_ali_recogner"/>
 		</Unit>
+		<Unit filename="/home/cybersecurity/Workspace/CSE396-rasp-ali-recogner/include/Frame.h">
+			<Option target="CSE396_rasp_ali_recogner"/>
+		</Unit>
 		<Unit filename="/home/cybersecurity/Workspace/CSE396-rasp-ali-recogner/include/ProccesImage.h">
 			<Option target="CSE396_rasp_ali_recogner"/>
 		</Unit>
@@ -117,6 +120,9 @@
 			<Option target="CSE396_rasp_ali_recogner"/>
 		</Unit>
 		<Unit filename="/home/cybersecurity/Workspace/CSE396-rasp-ali-recogner/src/ConnectionHelper.cpp">
+			<Option target="CSE396_rasp_ali_recogner"/>
+		</Unit>
+		<Unit filename="/home/cybersecurity/Workspace/CSE396-rasp-ali-recogner/src/Frame.cpp">
 			<Option target="CSE396_rasp_ali_recogner"/>
 		</Unit>
 		<Unit filename="/home/cybersecurity/Workspace/CSE396-rasp-ali-recogner/src/ProccesImage.cpp">

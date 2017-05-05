@@ -45,8 +45,8 @@ private:
     bool connected;
     int xCor;
     int yCor;
-    const int xMax = 890;
-    const int yMax = 620;
+    const int xMax = 700;
+    const int yMax = 480;
 };
 
 #endif //CSE396_RASP_ALI_RECOGNER_ARDUINO_H
