@@ -12,11 +12,12 @@ using namespace Group5;
 pthread_t thServer;
 pthread_mutex_t mtxServer;
 arduino *myArduino;
-
+void otomat();
+bool flag=false;
 int main() {
 
   try{
-    myArduino = new arduino(16,115200);
+    myArduino = new arduino(17,115200);
     myArduino->connect();
     pthread_create(&thServer,NULL,serverJobs,myArduino);
 
@@ -26,6 +27,8 @@ int main() {
     // arduino connections
 
     while(1){
+        if(!flag)
+            otomat();
     }
 
      /* int i=0;
@@ -53,7 +56,21 @@ int main() {
     return 0;
 }
 
+void otomat(){
+    while(!flag){
 
+        myArduino->step(1000,240);
+        myArduino->step(-1000,240);
+        myArduino->step(1000,0);
+
+        sleep(2);
+
+        myArduino->step(-1000,-240);
+        myArduino->step(1000,-240);
+        myArduino->step(-1000,0);
+
+        sleep(3);
+    }}
 
 
 

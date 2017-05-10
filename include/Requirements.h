@@ -12,5 +12,6 @@
 #include "Constants.h"
 
 #define LOG_FD stdout
+extern bool flag;
 
 #endif

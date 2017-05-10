@@ -18,6 +18,7 @@ bool arduino::connect() {
         return connected=false;
     }
     std::cerr<<"Arduino connected\n";
+
         step(30,130);
         xCor=0;
         yCor=0;
