@@ -18,11 +18,12 @@ bool arduino::connect() {
         return connected=false;
     }
     std::cerr<<"Arduino connected\n";
+    sleep(2)//connect icin gerekli
+    step(30,130);
 
-        step(30,130);
-        xCor=0;
-        yCor=0;
-        connected=true;
+    xCor=0;
+    yCor=0;
+    connected=true;
     return connected;
 }
 void arduino::disconnect() {
@@ -145,6 +146,7 @@ void arduino::step(int xStep, int yStep) {
 
     }
     sprintf(buffer,"X=%d,Y=%d",xStep,yStep);
-    sendBuf((unsigned char*)buffer,strlen(buffer));
+    std::cerr<<buffer<<std::endl;
+    std::cerr<<sendBuf((unsigned char*)buffer,strlen(buffer))<<std::endl;
     usleep(1102000);
 }

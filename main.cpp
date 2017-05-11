@@ -20,9 +20,6 @@ int main() {
     myArduino = new arduino(16,115200);
     myArduino->connect();
     pthread_create(&thServer,NULL,serverJobs,myArduino);
-
-
-
     // vision operations
     // arduino connections
 
@@ -30,7 +27,6 @@ int main() {
         if(!flag)
             otomat();
     }
-
 
     //  connectionHelper.writePort();
     //connectionHelper.openArdConnection();
@@ -43,6 +39,7 @@ int main() {
 }
 
 void otomat(){
+
     while(!flag){
 
         myArduino->step(1000,240);
