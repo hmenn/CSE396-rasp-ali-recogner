@@ -89,6 +89,7 @@ namespace Group5{
         bool getTakeImageFlag() const;
         void setTakeImageFlag(bool flag);
 
+        int rotasyon(Mat src);
         /**
          * Setter and Getter for msecond
          */

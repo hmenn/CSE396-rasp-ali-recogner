@@ -40,113 +40,133 @@ void ProcessImage::takeImage(int xCor, int yCor){
      waitKey(msecond);*/
 }
 
+int ProcessImage::rotasyon(Mat src){
+    int angle = -1;
+    Mat threshold_output;
+    Mat edge;
+    vector<vector<Point> > contours;
+    vector<Vec4i> hierarchy;
 
-void rotasyon(Mat src){
-
-
-    Mat gray_mat, canny_mat;
-    Mat contour_mat;
-
-    //1.Read image file & clone.
     cv::Mat binaryMat(src.size(), src.type());
+    cv::threshold(src, binaryMat, 15, 255, cv::THRESH_BINARY);
 
-    //Apply thresholding
-    cv::threshold(src, binaryMat, 25, 255, cv::THRESH_BINARY);
-    contour_mat = src.clone();
+    imshow("denem", binaryMat);
+    /// Find contours
+    findContours( binaryMat, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
 
+    /// Find the rotated rectangles and ellipses for each contour
+    vector<RotatedRect> minRect( contours.size() );
+    vector<RotatedRect> minEllipse( contours.size() );
+    vector<int> elipseIndex;
+    /*cout<<endl<<contours[1]<<endl;
+    cout<<endl<<Mat(contours[1])<<endl;*/
 
-
-
-    //3. Find & process the contours
-    //3.1 find contours on the edge image.
-    vector< vector< cv::Point> > contours;
-    findContours(binaryMat, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
-
-    //3.2 draw contours & property value on the source image.
-    double area, length;
-    Mat c;
-    cvtColor(contour_mat,contour_mat,COLOR_GRAY2BGR);
-    drawContours(contour_mat, contours, -1, cv::Scalar(0), 2);  //draw contours on the image
-
-    double maxlen = 0;
-    int indx = -1;
-    for(int i = 0; i < contours.size(); ++i) {
-        length = arcLength(contours[i], true);
-        if(length > maxlen){
-            maxlen = length;
-            indx = i;
+    Mat drawing = Mat::zeros( binaryMat.size(), CV_8UC3 );
+    double area = 0, maxArea = 0;
+    int index = 0;
+    for( int i = 0; i < contours.size(); i++ )
+    {
+        minRect[i] = minAreaRect( Mat(contours[i]) );
+        area = contourArea(contours[i]);
+        if(area > maxArea) {
+            maxArea = area;
+            index = i;
+        }
+        if( contours[i].size() > 50 )
+        {
+            elipseIndex.push_back(i);
+            minEllipse[i] = fitEllipse( Mat(contours[i]) );
+            circle(drawing, Point(minEllipse[i].center.x, minEllipse[i].center.y), 2, Scalar(0, 255, 255), 2, 8);
         }
     }
+    //cout << "elipseIndex.size : " << elipseIndex.size() << endl;
+    if(elipseIndex.size() == 2) {
+        int bX, bY, sX, sY;
+        int i, j, plusAngle;
+        i = elipseIndex[0]; j = elipseIndex[1];
+        if( minEllipse[i].size.area() > minEllipse[j].size.area())
+        {
+            //cout << "buyuk : " << minEllipse[i].center << " kucuk : " << minEllipse[j].center << endl;
+            bY = minEllipse[i].center.x;
+            bX = minEllipse[i].center.y;
+            sY = minEllipse[j].center.x;
+            sX = minEllipse[j].center.y;
+        }
+        else
+        {
+            //cout << "buyuk : " << minEllipse[j].center << " kucuk : " << minEllipse[i].center << endl;
+            bY = minEllipse[j].center.x;
+            bX = minEllipse[j].center.y;
+            sY = minEllipse[i].center.x;
+            sX = minEllipse[i].center.y;
+        }
+        cout << "bX: " << bX << " bY : " << bY << " sX : " << sX <<  " sY :" << sY << endl;
+        // find zone
+        if ((bX > sX) && (bY < sY)) {
+            plusAngle = 0;
+        } else if ((bX > sX) && (bY > sY)) {
+            plusAngle = 90;
+        } else if ((bX < sX) && (bY > sY)) {
+            plusAngle = 180;
+        } else if ((bX < sX) && (bY < sY)) {
+            plusAngle = 270;
+        } else if ((bX == sX) && (sY > bY)) {
+            //cout << "1" << endl;
+            angle = 0;
+        } else if ((bX == sX) && (sY < bY)) {
+            //cout << "2" << endl;
+            angle = 180;
+        }else if ((bX > sX) && (sY == bY)) {
+            //cout << "3" << endl;
+            angle = 90;
+        }else if ((bX < sX) && (sY == bY)) {
+            //cout << "4" << endl;
+            angle = 270;
+        }else
+            cout << "girmedi" << endl;
 
-    if(indx !=-1){
-        Rect rect;
-        RotatedRect rotate_rect;
-        Point2f points[4];
-        Point2f center;
-        float radius;
 
-        area = contourArea(contours[indx]);
-        rotate_rect = minAreaRect(contours[indx]);
-        length = arcLength(contours[indx], true);
-        minEnclosingCircle(contours[indx], center, radius);
+        /// Draw contours + rotated rects + ellipses
+        for( int i = 0; i< contours.size(); i++ )
+        {
+            Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
+            // contour
+            drawContours( drawing, contours, i, color, 1, 8, vector<Vec4i>(), 0, Point() );
+            // ellipse
+            ellipse( drawing, minEllipse[i], color, 2, 8 );
+            // rotated rectangle
+            Point2f rect_points[4]; minRect[i].points( rect_points );
+            for( int j = 0; j < 4; j++ )
+                line( drawing, rect_points[j], rect_points[(j+1)%4], color, 1, 8 );
+        }
+        /// Show in a window
+        namedWindow( "Contours", CV_WINDOW_AUTOSIZE );
+        imshow( "Contours", drawing );
 
-        rect = boundingRect(contours[indx]);
-        minEnclosingCircle(contours[indx], center, radius);
-        rotate_rect.points(points);
-
-
-        vector< vector< Point> > polylines;
-        polylines.resize(1);
-        for(int j = 0; j < 4; ++j)
-            polylines[0].push_back(points[j]);
-
-
-
-
-        /* //draw contour property value at the contour center.
-         char buffer[64] = {0};
-         sprintf(buffer, "Area: %.2lf", area);
-         putText(contour_mat, buffer, center, FONT_HERSHEY_SIMPLEX, .6, Scalar(0), 1);
-
-         sprintf(buffer, "Length: %.2lf", length);
-         putText(contour_mat, buffer, Point(center.x,center.y+20), FONT_HERSHEY_SIMPLEX, .6, Scalar(0), 1);
-
-         //draw them on the bounding image.
-         cv::rectangle(contour_mat, rect, Scalar(0,0,255), 2);
-         image2=binaryMat(Rect(rect.x,rect.y,rect.width,rect.height));
-         int x=0,y=0,total=0;
-         for(int i=0;i<image2.rows;++i)
-         {
-             for(int j=0;j<image2.cols;++j)
-             {
-                 if((int)image2.at<uchar😠j,i)==255)
-                 {
-                     x=x+j;
-                     y=y+i;
-                     ++total;
-                 }
-             }
-         }
-         x=x/total;
-         y=y/total;
-
-         int X=image2.cols/2;
-         int Y=image2.rows/2;
-         if(x-X!=0) {
-             double slope = (y - Y) / (x - X);
-             cout « atan (slope) * 180 / 3.14«endl;
-         }
-
-         imshow("a",image2);*/
-        waitKey(1);
+        if(angle == -1)
+            angle = abs(minRect[index].angle) + plusAngle;
+        cout << "**********  angle : " << angle << "  **********"<< endl;
+        return  angle;
+    } else {
+        cerr << "ERROR" << endl;
+        for( int i = 0; i< contours.size(); i++ )
+        {
+            Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
+            // contour
+            drawContours( drawing, contours, i, color, 1, 8, vector<Vec4i>(), 0, Point() );
+            // ellipse
+            ellipse( drawing, minEllipse[i], color, 2, 8 );
+            // rotated rectangle
+            Point2f rect_points[4]; minRect[i].points( rect_points );
+            for( int j = 0; j < 4; j++ )
+                line( drawing, rect_points[j], rect_points[(j+1)%4], color, 1, 8 );
+        }
+        /// Show in a window
+        namedWindow( "Contours", CV_WINDOW_AUTOSIZE );
+        imshow( "Contours", drawing );
+        return -1;
     }
-
-
-
-
-
 }
-
 
 void ProcessImage::SobelFilter(Mat &image1)
 {
