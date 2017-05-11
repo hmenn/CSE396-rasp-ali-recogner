@@ -104,7 +104,4 @@ namespace Group5{
 
 }
 
-
-
-
 #endif //FINDINGALI_PROCCESIMAGE_H

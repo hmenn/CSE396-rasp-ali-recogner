@@ -216,7 +216,6 @@ int ProcessImage::returnNumberOfEdgePixels(Mat image1)
     return total;
 }
 
-
 /**
  * @return Found flag ali bulundumu bulunmadi mi
  */

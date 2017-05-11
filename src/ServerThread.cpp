@@ -36,7 +36,6 @@ void *serverJobs(void *args) {
         usleep(300);
           msg = connectionHelper.readSocket(Constants::COMMAND_MSG_SIZE);
         sscanf(msg, "%d", &command);
-
         fprintf(LOG_FD, "-->Command:%d\n", command);
         switch (command) {
           case Constants::REQ_CLOSE_CONNECTION: {
@@ -54,7 +53,7 @@ void *serverJobs(void *args) {
             int y=myArduino->getY();
             char buffer[Constants::MIN_BUFFER_SIZE];
               bzero(buffer,Constants::MIN_BUFFER_SIZE);
-            sprintf(buffer,"%d %d",x,y);
+            sprintf(buffer,"%d,%d",x,y);
             int size = connectionHelper.writeSocket(buffer);
             fprintf(LOG_FD, "SocketWriteSize:%d\n", size);
             break;
@@ -69,12 +68,17 @@ void *serverJobs(void *args) {
           }case Constants::REQ_MANUAL_MODE: {
             int mode;
             sscanf(msg, "%d%c%d", &tempI,&tempCh,&mode);
-            if(mode) {fprintf(LOG_FD,"Manual mode opened!\n");
-                flag=true;}
-            else {fprintf(LOG_FD,"Manual mode closed!\n"); flag=false;}
-            connectionHelper.writeSocket("OK");
+            if(mode) {
+              fprintf(LOG_FD,"Manual mode opened!\n");
+              flag=true;
+            }
+            else {
+              fprintf(LOG_FD,"Manual mode closed!\n");
+              flag=false;
+            }
+              connectionHelper.writeSocket("OK");
             // CLOSE ARDUINO CONTROL FROM IMAGE PROCESS
-                flag=true;
+
             break;
           }
           default: {

@@ -58,9 +58,7 @@ void ConnectionHelper::releaseConnection() {
 char *ConnectionHelper::readSocket(int byte) {
 
   char *buffer = (char *) calloc(sizeof(char), byte);
-
   int size = read(socketfd, buffer, byte);
-
   if (size > 0) {
     return buffer;
   }
