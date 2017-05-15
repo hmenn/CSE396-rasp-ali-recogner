@@ -21,9 +21,15 @@ void run(ProcessImage & camera);
 
 int main() {
 
-  try {
+  try{
+#ifdef RS232
+    myArduino = new arduino(16,115200);
+#endif
+
+#ifdef SERIALPORT
+    myArduino = new arduino("/dev/ttyUSB1");
+#endif
     ProcessImage camera = ProcessImage::getInstance();
-    myArduino = new arduino(16, 115200);
     myArduino->connect();
 
 
