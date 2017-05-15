@@ -3,15 +3,16 @@
 //
 #include "rs232.h"
 #include <iostream>
-
+#include "SerialPort.h"
 #ifndef CSE396_RASP_ALI_RECOGNER_ARDUINO_H
 #define CSE396_RASP_ALI_RECOGNER_ARDUINO_H
-
+#define SERIALPORT 1
+//#define RS232 2
 class arduino {
 
 public:
     arduino(unsigned short int port, unsigned int baudRate);
-
+    arduino(const std::string& port);
     ~arduino();
 
     bool connect();
@@ -40,6 +41,7 @@ public:
 
 private:
     unsigned short int port;
+    std::string portName;
     unsigned int baudRate;
     const char mode[4] = {'8', 'N', '1', '\0'};
     bool connected;
@@ -47,6 +49,9 @@ private:
     int yCor;
     const int xMax = 700;
     const int yMax = 480;
+#ifdef SERIALPORT
+    SerialPort *mySerial;
+#endif
 };
 
 #endif //CSE396_RASP_ALI_RECOGNER_ARDUINO_H

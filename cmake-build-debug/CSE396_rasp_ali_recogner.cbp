@@ -107,6 +107,9 @@
 		<Unit filename="/home/cybersecurity/Workspace/CSE396-rasp-ali-recogner/include/Requirements.h">
 			<Option target="CSE396_rasp_ali_recogner"/>
 		</Unit>
+		<Unit filename="/home/cybersecurity/Workspace/CSE396-rasp-ali-recogner/include/SerialPort.h">
+			<Option target="CSE396_rasp_ali_recogner"/>
+		</Unit>
 		<Unit filename="/home/cybersecurity/Workspace/CSE396-rasp-ali-recogner/include/ServerThread.h">
 			<Option target="CSE396_rasp_ali_recogner"/>
 		</Unit>
@@ -126,6 +129,9 @@
 			<Option target="CSE396_rasp_ali_recogner"/>
 		</Unit>
 		<Unit filename="/home/cybersecurity/Workspace/CSE396-rasp-ali-recogner/src/ProccesImage.cpp">
+			<Option target="CSE396_rasp_ali_recogner"/>
+		</Unit>
+		<Unit filename="/home/cybersecurity/Workspace/CSE396-rasp-ali-recogner/src/SerialPort.cpp">
 			<Option target="CSE396_rasp_ali_recogner"/>
 		</Unit>
 		<Unit filename="/home/cybersecurity/Workspace/CSE396-rasp-ali-recogner/src/ServerThread.cpp">

@@ -17,7 +17,13 @@ bool flag=false;
 int main() {
 
   try{
+#ifdef RS232
     myArduino = new arduino(16,115200);
+#endif
+
+#ifdef SERIALPORT
+    myArduino = new arduino("/dev/ttyUSB1");
+#endif
     myArduino->connect();
     pthread_create(&thServer,NULL,serverJobs,myArduino);
     // vision operations
@@ -40,8 +46,6 @@ int main() {
 
 void otomat(){
 
-    while(!flag){
-
         myArduino->step(1000,240);
         myArduino->step(-1000,240);
         myArduino->step(1000,0);
@@ -53,7 +57,7 @@ void otomat(){
         myArduino->step(-1000,0);
 
         sleep(3);
-    }}
+    }
 
 
 
