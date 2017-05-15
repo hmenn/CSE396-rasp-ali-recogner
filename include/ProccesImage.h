@@ -4,6 +4,7 @@
 
 #ifndef FINDINGALI_PROCCESIMAGE_H
 #define FINDINGALI_PROCCESIMAGE_H
+
 #include <iostream>
 #include <vector>
 #include <opencv2/core.hpp>
@@ -11,104 +12,99 @@
 #include "Frame.h"
 #include <iostream>
 #include <cmath>
+
 using namespace cv;
 using namespace std;
 
-namespace Group5{
+class ProcessImage {
 
-    class ProcessImage{
+private:
+    ProcessImage() {
+      msecond = 50;//0.5 saniye
+    }
 
-    private:
+    vector<Frame> frameList;  // filterli resim
+    vector<Frame> realFrameL;
 
-        ProcessImage() {
-            msecond = 50;//0.5 saniye
-        }
+    bool foundFlag = false;
+    /**
+     * TakeSingle Image Flag
+     */
+    bool takeImageFlag = true;
+    /**
+     * Bir sonraki fotoğrafı cekmeden önceki bekleme süresi mili saniye cinsinden
+     */
+    int msecond;
+    /**
+     * Fiziksel kamerayi kullanan kamera nesnesi
+     */
+    VideoCapture camera;
 
-        vector<Frame> frameList;  // filterli resim
-        vector<Frame> realFrameL;
+    /**
+     * Cameradan alinan orjinal renkli fotograf
+     */
+    Mat picture;
 
+    /*
+     * Cameradan alinan orjinal resmin islenmis hali
+     */
+    Mat frame;
 
-        bool foundFlag = false;
-        /**
-         * TakeSingle Image Flag
-         */
-        bool takeImageFlag = true;
-        /**
-         * Bir sonraki fotoğrafı cekmeden önceki bekleme süresi mili saniye cinsinden
-         */
-        int msecond;
-        /**
-         * Fiziksel kamerayi kullanan kamera nesnesi
-         */
-        VideoCapture camera;
+    //FUNCTIONS
 
-        /**
-         * Cameradan alinan orjinal renkli fotograf
-         */
-        Mat picture;
+    void SobelFilter(Mat &image1);
 
-        /*
-         * Cameradan alinan orjinal resmin islenmis hali
-         */
-        Mat frame;
+    int returnNumberOfEdgePixels(Mat image1);
 
-        //FUNCTIONS
-
-        void SobelFilter(Mat &image1);
-
-        int     returnNumberOfEdgePixels(Mat image1);
-
-        int maxTotalWeight = 0, maxWeightIndex;
+    int maxTotalWeight = 0, maxWeightIndex;
 /*****************************************************************************/
 
-    public:
+public:
+    static ProcessImage& getInstance();
 
-        static ProcessImage& getInstance() {
-            static ProcessImage instance;
-            return instance; //Ilk seferde initialize e
-        }
-        void writeToFile(string path);
+    void writeToFile(string path);
 
+    /*
+     * Kamerayi acıyor acmadi ise -1 fırlatiyor
+     */
+    void openCamera(int cid);
 
-
-
-        /*
-         * Kamerayi acıyor acmadi ise -1 fırlatiyor
-         */
-        void openCamera();
-
-        /**
-         * Take image from physical device run with threads
-         */
-        void takeImage(int x, int y);
+    /**
+     * Take image from physical device run with threads
+     */
+    void takeImage(int x, int y);
 
 
-        /**
-        * Setter and Getter for found if ali found set true
-        */
-        bool getFoundFlag() const;
-        void setFoundFlag(bool found);
+    /**
+    * Setter and Getter for found if ali found set true
+    */
+    bool getFoundFlag() const;
 
-        /**
-         * Setter and Getter for Take Input Flag
-         */
-        bool getTakeImageFlag() const;
-        void setTakeImageFlag(bool flag);
+    void setFoundFlag(bool found);
 
-        int rotasyon(Mat src);
-        /**
-         * Setter and Getter for msecond
-         */
-        int getMsecond() const;
-        void setMsecond(int msecond);
-        int getMaxFrameofX(){
-            frameList[maxWeightIndex].getX();
-        }
-        int getMaxFrameofY(){
-            frameList[maxWeightIndex].getY();
-        }
-    };
+    /**
+     * Setter and Getter for Take Input Flag
+     */
+    bool getTakeImageFlag() const;
 
-}
+    void setTakeImageFlag(bool flag);
+
+    int rotasyon(Mat src);
+
+    /**
+     * Setter and Getter for msecond
+     */
+    int getMsecond() const;
+
+    void setMsecond(int msecond);
+
+    int getMaxFrameofX() {
+      frameList[maxWeightIndex].getX();
+    }
+
+    int getMaxFrameofY() {
+      frameList[maxWeightIndex].getY();
+    }
+};
 
 #endif //FINDINGALI_PROCCESIMAGE_H

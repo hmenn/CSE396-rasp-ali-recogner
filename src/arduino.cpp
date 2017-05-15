@@ -146,7 +146,7 @@ void arduino::step(int xStep, int yStep) {
 
     }
     sprintf(buffer,"X=%d,Y=%d",xStep,yStep);
-    std::cerr<<buffer<<std::endl;
-    std::cerr<<sendBuf((unsigned char*)buffer,strlen(buffer))<<std::endl;
-    usleep(1102000);
+    std::cerr<<"GO:"<<buffer;
+    std::cerr<<" Return: "<<sendBuf((unsigned char*)buffer,strlen(buffer))<<std::endl;
+
 }
