@@ -5,7 +5,7 @@
 #include "../include/ProccesImage.h"
 
 using namespace Group5;
-
+RNG rng(12345);
 void ProcessImage::openCamera(){
 
     camera.open(0);

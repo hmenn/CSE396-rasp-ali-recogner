@@ -4,8 +4,13 @@
 
 #ifndef FINDINGALI_PROCCESIMAGE_H
 #define FINDINGALI_PROCCESIMAGE_H
-#include "opencv2/opencv.hpp"
+#include <iostream>
+#include <vector>
+#include <opencv2/core.hpp>
+#include <string>
 #include "Frame.h"
+#include <iostream>
+#include <cmath>
 using namespace cv;
 using namespace std;
 
@@ -14,6 +19,7 @@ namespace Group5{
     class ProcessImage{
 
     private:
+
         ProcessImage() {
             msecond = 50;//0.5 saniye
         }

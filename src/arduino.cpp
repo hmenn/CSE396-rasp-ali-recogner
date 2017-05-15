@@ -18,7 +18,7 @@ bool arduino::connect() {
         return connected=false;
     }
     std::cerr<<"Arduino connected\n";
-    sleep(2)//connect icin gerekli
+    sleep(2);//connect icin gerekli
     step(30,130);
 
     xCor=0;
