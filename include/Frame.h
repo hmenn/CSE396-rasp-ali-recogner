@@ -12,7 +12,6 @@
 using namespace cv;
 class Frame {
 
-
 private:
 public:
     Frame(int x, int y,  Mat Image);
