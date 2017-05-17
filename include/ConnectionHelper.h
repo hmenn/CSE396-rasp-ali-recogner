@@ -8,7 +8,7 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include "arduino.h"
+#include "ArduinoDriver.h"
 
 class ConnectionHelper {
 

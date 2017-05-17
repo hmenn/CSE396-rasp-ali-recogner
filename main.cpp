@@ -3,14 +3,14 @@
 #include "include/ProccesImage.h"
 #include "include/ConnectionHelper.h"
 #include "include/ServerThread.h"
-#include "include/arduino.h"
+#include "include/ArduinoDriver.h"
 
 using namespace cv;
 using namespace std;
 
 pthread_t thServer;
 pthread_mutex_t mtxServer;
-arduino *myArduino;
+ArduinoDriver *myArduino;
 
 
 void otomat();
@@ -23,31 +23,19 @@ int main() {
 
   try {
 
-    SerialPort *serialPort = new SerialPort("/dev/ttyUSB1",SerialPort::BR_9600);
     string str;
-
-    if(!serialPort->open()){
-      cerr << "Open failed" << endl;
-      return false;
-    }
-    if( !( serialPort->prepare()) ){
-      usleep(100);
-      cerr << "Prepare failed" << endl;
-      return false;
+    myArduino = new ArduinoDriver(SerialPort::BR_9600);
+    if(!myArduino->connect()){
+      return 0;
     }
 
 
-    serialPort->makeHandshake();
     cout<<"Hand Shake completed!"<<endl;
 
     for(int i=0;i<10;++i){
-      char msg[Constants::MAX_BUFFER_SIZE];
-      bzero(msg,Constants::MAX_BUFFER_SIZE);
-      sprintf(msg,"X=%d,Y=%d.",30*(i+1),15*(i+1));
-      while(!serialPort->writeString(msg));
-      usleep(100000);
-      while(!serialPort->readUntil(str,'.'));
-      printf("Read: %s\n",str.c_str());
+      myArduino->step(30*(i+1),0);
+      //usleep(100000);
+      cout<<myArduino->readString();
     }
 
 

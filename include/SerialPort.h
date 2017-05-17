@@ -159,7 +159,7 @@ private:
     int fd;
 
 public:
-    void makeHandshake();
+    bool makeHandshake();
 
 };
 

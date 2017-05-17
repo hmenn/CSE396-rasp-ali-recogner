@@ -5,7 +5,7 @@
 #include "../include/ServerThread.h"
 #include "../include/ConnectionHelper.h"
 #include "../include/Requirements.h"
-#include "../include/arduino.h"
+#include "../include/ArduinoDriver.h"
 
 
 void *serverJobs(void *args) {
@@ -17,7 +17,7 @@ void *serverJobs(void *args) {
   int tempI;
   char tempCh;
   int XStep, YStep;
-  arduino *myArduino = (arduino *)args;
+  ArduinoDriver *myArduino = (ArduinoDriver *)args;
 
   fprintf(LOG_FD, "Server Thread started.");
 
