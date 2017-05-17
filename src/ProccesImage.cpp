@@ -39,7 +39,7 @@ int ProcessImage::rotasyon(Mat src) {
   Canny(src, binaryMat, 40, 120, 3);
   dilate(binaryMat, binaryMat, getStructuringElement(MORPH_RECT, Size(5, 5)));
   imshow("binary", binaryMat);
-  waitKey(10);
+  waitKey(5);
   /// Find contours
   findContours(binaryMat, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
 

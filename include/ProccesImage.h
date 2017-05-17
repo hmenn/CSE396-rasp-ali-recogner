@@ -96,6 +96,10 @@ public:
 
     int rotasyon(Mat src);
 
+    Mat getLastImage(){
+      return realFrameL[realFrameL.size()-1].getImage();
+    }
+
     /**
      * Setter and Getter for msecond
      */

@@ -23,23 +23,35 @@ int main() {
 
   try {
 
+    ProcessImage processImage = ProcessImage::getInstance();
+    processImage.openCamera(1);
+
+
     string str;
     myArduino = new ArduinoDriver(SerialPort::BR_9600);
     if(!myArduino->connect()){
       return 0;
     }
 
-
-    cout<<"Hand Shake completed!"<<endl;
+    /*cout<<"Hand Shake completed!"<<endl;
     myArduino->step(30,130);
     usleep(3000);
+    cout<<myArduino->readString();*/
 
-    cout<<myArduino->readString();
-    for(int i=0;i<10;++i){
-      myArduino->step(120,130);
 
+    /*while(1){
+      processImage.takeImage(0,0);
+    }*/
+
+    for(int i=0;i<200;++i){
+      myArduino->step(75,0);
       usleep(3000);
       cout<<myArduino->readString();
+      if(processImage.takeImage(0,0)){
+        cout<<"Angle:"<<processImage.rotasyon(processImage.getLastImage());
+        cerr<<"Found"<<endl;
+        break;
+      }
     }
 
 
