@@ -23,6 +23,7 @@ void *serverJobs(void *args) {
 
   ConnectionHelper connectionHelper;
 
+  int a=0;
   try {
 
     while (1) {
@@ -31,8 +32,16 @@ void *serverJobs(void *args) {
       fprintf(LOG_FD, "Thread connected socketfd:%d\n", socketFD);
       run = 1;
 
+      msg = connectionHelper.readSocket(Constants::COMMAND_MSG_SIZE);
+      printf("Msg:%s\n",msg);
+      if(strcmp(msg,"H")==0){
+        int si = connectionHelper.writeSocket("S");
+        printf("%d\n",si);
+      }
+      printf("HandShake!!\n");
+
       while (run) {
-        usleep(300);
+        usleep(1000000);
         msg = connectionHelper.readSocket(Constants::COMMAND_MSG_SIZE);
         sscanf(msg, "%d", &command);
         fprintf(LOG_FD, "-->Command:%d\n", command);
@@ -53,8 +62,7 @@ void *serverJobs(void *args) {
             cv::imencode(".jpg", fm.getImage(), buff, param);
             bzero(msg,10);
 
-            sprintf(msg,"%d",buff.size());
-            printf("%s\n",msg);
+            sprintf(msg,"%d",55);
             connectionHelper.writeSocket(msg);
             /*char *bd = (char *)buff.data();
             for(int i=0;i<buff.size();++i){
@@ -65,8 +73,10 @@ void *serverJobs(void *args) {
             break;
           }
           case Constants::REQ_ASK_CURRENT_COORDS: {
-            int x = myArduino->getX();
-            int y = myArduino->getY();
+            int x = a;
+            int y = a;
+
+            a+=10;
 
             char buffer[Constants::MIN_BUFFER_SIZE];
             bzero(buffer, Constants::MIN_BUFFER_SIZE);
