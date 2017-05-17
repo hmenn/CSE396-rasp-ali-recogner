@@ -47,7 +47,6 @@ int main() {
       myArduino->step(75,0);
       usleep(2000);
 
-      cout<<myArduino->readString();
       if(processImage.takeImage(0,0)){
         cout<<"Angle:"<<processImage.rotasyon(processImage.getLastImage());
         cerr<<"Found"<<endl;
