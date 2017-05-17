@@ -32,12 +32,13 @@ int main() {
 
     cout<<"Hand Shake completed!"<<endl;
     myArduino->step(30,130);
-    usleep(1000000);
+    usleep(3000);
+
     cout<<myArduino->readString();
     for(int i=0;i<10;++i){
       myArduino->step(120,130);
 
-      usleep(1000000);
+      usleep(3000);
       cout<<myArduino->readString();
     }
 

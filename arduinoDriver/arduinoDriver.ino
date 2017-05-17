@@ -5,8 +5,8 @@
 //Y 610 adım
 #define X_DIRECTION 4 //X icin yon
 #define Y_DIRECTION 6 //Y icin yon
-#define X_ENABLE 6 //Y icin yo
-#define Y_ENABLE 6 //Y icin yo
+#define X_ENABLE 8 //Y icin yo
+#define Y_ENABLE 9 //Y icin yo
 #define X_STEP 3 //X icin step pulse
 #define Y_STEP 5 //Y icin step pulse
 #define MAXSTEPX 920 //360/x=1.8 x=200 adım
@@ -24,10 +24,10 @@ void setup() {
   digitalWrite(X_DIRECTION,LOW);
   pinMode(Y_DIRECTION,OUTPUT);
   digitalWrite(Y_DIRECTION,LOW);
-  pinMode(X_DIRECTION,OUTPUT);
-  digitalWrite(X_DIRECTION,LOW);
-  pinMode(Y_DIRECTION,OUTPUT);
-  digitalWrite(Y_DIRECTION,LOW);
+  pinMode(X_ENABLE,OUTPUT);
+  digitalWrite(X_ENABLE,HIGH);
+  pinMode(Y_ENABLE,OUTPUT);
+  digitalWrite(Y_ENABLE,HIGH);
   pinMode(X_STEP,OUTPUT);
   digitalWrite(X_STEP,LOW);
   pinMode(Y_STEP,OUTPUT);
@@ -45,6 +45,8 @@ bool makeHandshake(){
   ch = Serial.read();
   if(ch=='H'){
     Serial.write('C');
+     digitalWrite(X_ENABLE,LOW);
+      digitalWrite(Y_ENABLE,LOW);
     return true;
   }else{
     return false;
