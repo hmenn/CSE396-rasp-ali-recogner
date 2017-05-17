@@ -56,13 +56,19 @@ private:
 
     int returnNumberOfEdgePixels(Mat image1);
 
+    bool detectStickMan(Mat src);
+
     int maxTotalWeight = 0, maxWeightIndex;
 /*****************************************************************************/
 
 public:
-    static ProcessImage& getInstance();
+    static ProcessImage &getInstance();
 
     void writeToFile(string path);
+
+    Mat concatImage();
+
+    Mat findSector(int x, int y);
 
     /*
      * Kamerayi acıyor acmadi ise -1 fırlatiyor
@@ -72,8 +78,7 @@ public:
     /**
      * Take image from physical device run with threads
      */
-    void takeImage(int x, int y);
-
+    bool takeImage(int x, int y);
 
     /**
     * Setter and Getter for found if ali found set true

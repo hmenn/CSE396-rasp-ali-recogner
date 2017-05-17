@@ -5,7 +5,7 @@
 
 RNG rng(12345);
 
-ProcessImage& ProcessImage::getInstance() {
+ProcessImage &ProcessImage::getInstance() {
   static ProcessImage INSTANCE;
   return INSTANCE; //Ilk seferde initialize e
 }
@@ -21,41 +21,25 @@ void ProcessImage::openCamera(int cid) {
 /*
  * Take single
  */
-void ProcessImage::takeImage(int xCor, int yCor) {
+bool ProcessImage::takeImage(int xCor, int yCor) {
   camera >> frame;
-
   Frame real = Frame(xCor, yCor, frame);
   realFrameL.push_back(real);
-  SobelFilter(frame);
-  Frame sobel = Frame(xCor, yCor, frame);
-
-  int total = returnNumberOfEdgePixels(sobel.getImage());
-  sobel.setTotalPixel(total);
-  frameList.push_back(sobel);
-
-  if (maxTotalWeight < total) {
-    maxTotalWeight = total;
-    maxWeightIndex = frameList.size() - 1;
-  }
-
-
-  /* if(!frame.empty()){
-       imshow("Frame",frame);
-   }
-   waitKey(msecond);*/
+  //rotasyon(frame);
+  return detectStickMan(frame);
 }
 
 int ProcessImage::rotasyon(Mat src) {
-  int angle = -1;
-  Mat threshold_output;
-  Mat edge;
+  double angle = -1;
   vector<vector<Point> > contours;
   vector<Vec4i> hierarchy;
 
   cv::Mat binaryMat(src.size(), src.type());
-  cv::threshold(src, binaryMat, 15, 255, cv::THRESH_BINARY);
-
-  imshow("denem", binaryMat);
+  GaussianBlur(src, src, Size(3, 3), 2);
+  Canny(src, binaryMat, 40, 120, 3);
+  dilate(binaryMat, binaryMat, getStructuringElement(MORPH_RECT, Size(5, 5)));
+  imshow("binary", binaryMat);
+  waitKey(10);
   /// Find contours
   findContours(binaryMat, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
 
@@ -84,7 +68,7 @@ int ProcessImage::rotasyon(Mat src) {
   }
   //cout << "elipseIndex.size : " << elipseIndex.size() << endl;
   if (elipseIndex.size() == 2) {
-    int bX, bY, sX, sY;
+    double bX, bY, sX, sY;
     int i, j, plusAngle;
     i = elipseIndex[0];
     j = elipseIndex[1];
@@ -101,27 +85,37 @@ int ProcessImage::rotasyon(Mat src) {
       sY = minEllipse[i].center.x;
       sX = minEllipse[i].center.y;
     }
-    cout << "bX: " << bX << " bY : " << bY << " sX : " << sX << " sY :" << sY << endl;
+    //cout << "bX: " << bX << " bY : " << bY << " sX : " << sX <<  " sY :" << sY << endl;
     // find zone
     if ((bX > sX) && (bY < sY)) {
-      plusAngle = 0;
-    } else if ((bX > sX) && (bY > sY)) {
-      plusAngle = 90;
-    } else if ((bX < sX) && (bY > sY)) {
-      plusAngle = 180;
-    } else if ((bX < sX) && (bY < sY)) {
-      plusAngle = 270;
-    } else if ((bX == sX) && (sY > bY)) {
+      angle = 90 - (atan((sY - bY) / (bX - sX)) * 180 / CV_PI);
       //cout << "1" << endl;
+    } else if ((bX > sX) && (bY > sY)) {
+      angle = atan((bY - sY) / (bX - sX)) * 180 / CV_PI;
+      plusAngle = 90;
+      angle += plusAngle;
+      //cout << "2" << endl;
+    } else if ((bX < sX) && (bY > sY)) {
+      angle = atan((sX - bX) / (bY - sY)) * 180 / CV_PI;
+      plusAngle = 180;
+      angle += plusAngle;
+      //cout << "3" << endl;
+    } else if ((bX < sX) && (bY < sY)) {
+      angle = atan((sY - bY) / (sX - bX)) * 180 / CV_PI;
+      plusAngle = 270;
+      angle += plusAngle;
+      // cout << "4" << endl;
+    } else if ((bX == sX) && (sY > bY)) {
+      //cout << "5" << endl;
       angle = 0;
     } else if ((bX == sX) && (sY < bY)) {
-      //cout << "2" << endl;
+      //cout << "6" << endl;
       angle = 180;
     } else if ((bX > sX) && (sY == bY)) {
-      //cout << "3" << endl;
+      //cout << "7" << endl;
       angle = 90;
     } else if ((bX < sX) && (sY == bY)) {
-      //cout << "4" << endl;
+      //cout << "8" << endl;
       angle = 270;
     } else
       cout << "girmedi" << endl;
@@ -129,44 +123,48 @@ int ProcessImage::rotasyon(Mat src) {
 
     /// Draw contours + rotated rects + ellipses
     for (int i = 0; i < contours.size(); i++) {
-      Scalar color = Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
+      //Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
       // contour
-      drawContours(drawing, contours, i, color, 1, 8, vector<Vec4i>(), 0, Point());
+      drawContours(drawing, contours, i, Scalar(255, 255, 255), 1, 8, vector<Vec4i>(), 0, Point());
       // ellipse
-      ellipse(drawing, minEllipse[i], color, 2, 8);
+      ellipse(drawing, minEllipse[i], Scalar(0, 255, 255), 2, 8);
       // rotated rectangle
       Point2f rect_points[4];
       minRect[i].points(rect_points);
       for (int j = 0; j < 4; j++)
-        line(drawing, rect_points[j], rect_points[(j + 1) % 4], color, 1, 8);
+        line(drawing, rect_points[j], rect_points[(j + 1) % 4], Scalar(0, 0, 255), 1, 8);
     }
     /// Show in a window
     namedWindow("Contours", CV_WINDOW_AUTOSIZE);
     imshow("Contours", drawing);
 
-    if (angle == -1)
+    if (angle == -1) {
+      //cout << "angle : " << abs(minRect[index].angle) << endl;
       angle = abs(minRect[index].angle) + plusAngle;
-    cout << "**********  angle : " << angle << "  **********" << endl;
+      //cout << "angle : " << abs(minRect[index].angle) << " plusAngle : " << plusAngle << endl;
+    }
+    cout << "**********  angle : " << (int) angle << "  **********" << endl;
     return angle;
   } else {
-    cerr << "ERROR" << endl;
+    //cerr << "No angle" << endl;
     for (int i = 0; i < contours.size(); i++) {
-      Scalar color = Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
+      //Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
       // contour
-      drawContours(drawing, contours, i, color, 1, 8, vector<Vec4i>(), 0, Point());
+      drawContours(drawing, contours, i, Scalar(0, 255, 0), 1, 8, vector<Vec4i>(), 0, Point());
       // ellipse
-      ellipse(drawing, minEllipse[i], color, 2, 8);
+      ellipse(drawing, minEllipse[i], Scalar(0, 255, 255), 2, 8);
       // rotated rectangle
       Point2f rect_points[4];
       minRect[i].points(rect_points);
       for (int j = 0; j < 4; j++)
-        line(drawing, rect_points[j], rect_points[(j + 1) % 4], color, 1, 8);
+        line(drawing, rect_points[j], rect_points[(j + 1) % 4], Scalar(0, 0, 255), 1, 8);
     }
     /// Show in a window
     namedWindow("Contours", CV_WINDOW_AUTOSIZE);
     imshow("Contours", drawing);
     return -1;
   }
+  return -1;
 }
 
 void ProcessImage::SobelFilter(Mat &image1) {
@@ -194,6 +192,85 @@ void ProcessImage::SobelFilter(Mat &image1) {
   addWeighted(abs_grad_x, 0.5, abs_grad_y, 0.5, 0, image1);
 }
 
+bool ProcessImage::detectStickMan(Mat src) {
+  vector<vector<Point> > contours;
+  vector<Vec4i> hierarchy;
+
+  //filters
+  cv::Mat binaryMat(src.size(), src.type());
+  GaussianBlur(src, src, Size(3, 3), 2);
+  Canny(src, binaryMat, 40, 120, 3);
+
+
+  dilate(binaryMat, binaryMat, getStructuringElement(MORPH_RECT, Size(5, 5)));
+  imshow("binary", binaryMat);
+  waitKey(10);
+  /// Find contours
+  findContours(binaryMat, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
+
+  /// Find the rotated rectangles and ellipses for each contour
+  vector<RotatedRect> minRect(contours.size());
+  vector<RotatedRect> minEllipse(contours.size());
+  vector<int> elipseIndex;
+
+  double area = 0, maxArea = 0;
+  int index = 0;
+  for (int i = 0; i < contours.size(); i++) {
+    minRect[i] = minAreaRect(Mat(contours[i]));
+    area = contourArea(contours[i]);
+    if (area > maxArea) {
+      maxArea = area;
+      index = i;
+    }
+    if (contours[i].size() > 50) {
+      elipseIndex.push_back(i);
+      minEllipse[i] = fitEllipse(Mat(contours[i]));
+    }
+  }
+  int maxElips, minElips;
+  if (elipseIndex.size() == 2) {
+    int i, j, plusAngle;
+    i = elipseIndex[0];
+    j = elipseIndex[1];
+    if (minEllipse[i].size.area() > minEllipse[j].size.area()) {
+      maxElips = i;
+      minElips = j;
+    } else {
+      maxElips = j;
+      minElips = i;
+    }
+    double rate = 0;
+    if (minEllipse[maxElips].size.height < minEllipse[maxElips].size.width) {
+      rate = minEllipse[minElips].size.width / minEllipse[minElips].size.height;
+    } else if (minEllipse[maxElips].size.height > minEllipse[maxElips].size.width) {
+      rate = minEllipse[minElips].size.height / minEllipse[minElips].size.width;
+    } else
+      rate = 1;
+
+    int maxMinEl, maxMaxEl;
+
+    // min elipsin max capi
+    if (minEllipse[maxElips].size.width > minEllipse[maxElips].size.height)
+      maxMinEl = minEllipse[maxElips].size.width;
+    else
+      maxMinEl = minEllipse[maxElips].size.height;
+    // max elipsin max capi
+    if (minEllipse[minElips].size.width > minEllipse[minElips].size.height)
+      maxMaxEl = minEllipse[minElips].size.width;
+    else
+      maxMaxEl = minEllipse[minElips].size.height;
+
+    if (minRect[index].boundingRect().contains(minEllipse[maxElips].center)
+        && rate < 2 && minRect[index].boundingRect().area() > 20000
+        && (maxMaxEl / maxMinEl) < 2) {
+      cout << "buldu " << endl;
+      return true;
+    }
+    return false;
+  }
+  return false;
+}
+
 void ProcessImage::writeToFile(string path) {
   string str = "";
   for (int a = 0; a < frameList.size(); ++a) // cektigi resimleri klasore yazar
@@ -214,6 +291,50 @@ void ProcessImage::writeToFile(string path) {
 
 
 }
+
+Mat ProcessImage::concatImage() {
+
+
+  //sıfıra sıfır dan baslayan ilk bölge birinci bölge
+  // 1 2  3 4
+  // 5 6 7 8
+  Mat a, b, res1, res2, result;
+  int dummyX = 50, dummyY = 50;
+  //frame listten resimleri c
+  a = findSector(dummyX, dummyY);
+  b = findSector(dummyX, dummyY);
+  hconcat(a, b, res1);
+  a = findSector(dummyX, dummyY);
+  b = findSector(dummyX, dummyY);
+  hconcat(res1, a, res1);
+  hconcat(res1, b, res1);
+  a = findSector(dummyX, dummyY);
+  b = findSector(dummyX, dummyY);
+  hconcat(a, b, res2);
+  a = findSector(dummyX, dummyY);
+  b = findSector(dummyX, dummyY);
+  hconcat(res2, a, res2);
+  hconcat(res2, b, res2);
+
+  vconcat(res1, res2, result);
+
+  return result;
+}
+
+/**
+ * 8 parcanın tam ortasında cekilmis imageeler ///cok mu verimsiz aynı anda concatta bul.//
+ * @param x her bir parcanın arduinodan gelen orta noktasının xi
+ * @param y her bir parcanın arduinodan gelen orta noktasının yi
+ * @return  o noktada cekilen image
+ */
+Mat ProcessImage::findSector(int x,int y){
+  for (int i = 0; i <frameList.size() ; ++i) {
+    if (frameList.at(i).getX() == x & frameList.at(i).getY()==y)
+      return frameList.at(i).getImage();
+  }
+  //  return NULL;
+}
+
 
 int ProcessImage::returnNumberOfEdgePixels(Mat image1) {
   cv::Mat binaryMat(image1.size(), image1.type());
