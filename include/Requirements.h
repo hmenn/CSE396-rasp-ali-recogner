@@ -10,8 +10,10 @@
 #include <pthread.h>
 #include "Exceptions396.h"
 #include "Constants.h"
+#include "Frame.h"
 
 #define LOG_FD stdout
 extern bool flag;
+extern Frame fm;
 
 #endif

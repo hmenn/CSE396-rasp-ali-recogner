@@ -56,7 +56,7 @@ private:
 
     int returnNumberOfEdgePixels(Mat image1);
 
-    bool detectStickMan(Mat src);
+    bool detectStickMan(Mat& src);
 
     int maxTotalWeight = 0, maxWeightIndex;
 /*****************************************************************************/

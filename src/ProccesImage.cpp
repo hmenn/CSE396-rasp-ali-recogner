@@ -10,10 +10,12 @@ ProcessImage &ProcessImage::getInstance() {
   return INSTANCE; //Ilk seferde initialize e
 }
 
+Frame fm;
+
 void ProcessImage::openCamera(int cid) {
 
   camera.open(cid);
-  camera.set(CV_CAP_PROP_FPS, 1);
+  camera.set(CV_CAP_PROP_FPS, 30);
   if (!camera.isOpened())
     throw -1;
 }
@@ -23,10 +25,19 @@ void ProcessImage::openCamera(int cid) {
  */
 bool ProcessImage::takeImage(int xCor, int yCor) {
   camera >> frame;
-  Frame real = Frame(xCor, yCor, frame);
-  realFrameL.push_back(real);
+  //Frame real = Frame(xCor, yCor, frame);
+  //realFrameL.push_back(real);
+  fm = Frame(0, 0, frame);
+  imshow("pen", frame);
+  waitKey(5);
   //rotasyon(frame);
-  return detectStickMan(frame);
+  /*while(1) {
+    camera >> frame;
+    imshow("pen", frame);
+    waitKey(5);
+  }*/
+  return false;
+  //return detectStickMan(frame);
 }
 
 int ProcessImage::rotasyon(Mat src) {
@@ -192,8 +203,9 @@ void ProcessImage::SobelFilter(Mat &image1) {
   addWeighted(abs_grad_x, 0.5, abs_grad_y, 0.5, 0, image1);
 }
 
-bool ProcessImage::detectStickMan(Mat src) {
-  vector<vector<Point> > contours;
+bool ProcessImage::detectStickMan(Mat& src) {
+  cerr<<"Here"<<endl;
+  /*vector<vector<Point> > contours;
   vector<Vec4i> hierarchy;
 
   //filters
@@ -201,11 +213,10 @@ bool ProcessImage::detectStickMan(Mat src) {
   GaussianBlur(src, src, Size(3, 3), 2);
   Canny(src, binaryMat, 40, 120, 3);
 
-
-  dilate(binaryMat, binaryMat, getStructuringElement(MORPH_RECT, Size(5, 5)));
-  imshow("binary", binaryMat);
-  waitKey(10);
-  /// Find contours
+  dilate(binaryMat, binaryMat, getStructuringElement(MORPH_RECT, Size(5, 5)));*/
+  imshow("binary", src);
+  waitKey(5);
+ /* /// Find contours
   findContours(binaryMat, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
 
   /// Find the rotated rectangles and ellipses for each contour
@@ -267,7 +278,7 @@ bool ProcessImage::detectStickMan(Mat src) {
       return true;
     }
     return false;
-  }
+  }*/
   return false;
 }
 
@@ -327,9 +338,9 @@ Mat ProcessImage::concatImage() {
  * @param y her bir parcanın arduinodan gelen orta noktasının yi
  * @return  o noktada cekilen image
  */
-Mat ProcessImage::findSector(int x,int y){
-  for (int i = 0; i <frameList.size() ; ++i) {
-    if (frameList.at(i).getX() == x & frameList.at(i).getY()==y)
+Mat ProcessImage::findSector(int x, int y) {
+  for (int i = 0; i < frameList.size(); ++i) {
+    if (frameList.at(i).getX() == x & frameList.at(i).getY() == y)
       return frameList.at(i).getImage();
   }
   //  return NULL;

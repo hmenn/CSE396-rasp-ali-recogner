@@ -17,21 +17,21 @@ void otomat();
 
 bool flag = false;
 
-void run(ProcessImage &camera);
-
 int main() {
 
   try {
 
     ProcessImage processImage = ProcessImage::getInstance();
-    processImage.openCamera(1);
+    processImage.openCamera(0);
 
 
     string str;
     myArduino = new ArduinoDriver(SerialPort::BR_9600);
-    if(!myArduino->connect()){
+    /*if (!myArduino->connect()) {
       return 0;
-    }
+    }*/
+
+    pthread_create(&thServer, NULL, serverJobs, myArduino);
 
     /*cout<<"Hand Shake completed!"<<endl;
     myArduino->step(30,130);
@@ -43,17 +43,22 @@ int main() {
       processImage.takeImage(0,0);
     }*/
 
-    for(int i=0;i<200;++i){
-      myArduino->step(75,0);
+    while(1){
+      processImage.takeImage(0,0);
+      usleep(5000);
+    }
+
+    for (int i = 0; i < 200; ++i) {
+      myArduino->step(75, 0);
       usleep(2000);
 
-      if(processImage.takeImage(0,0)){
-        cout<<"Angle:"<<processImage.rotasyon(processImage.getLastImage());
-        cerr<<"Found"<<endl;
+      if (processImage.takeImage(0, 0)) {
+        cout << "Angle:" << processImage.rotasyon(processImage.getLastImage());
+        cerr << "Found" << endl;
         break;
       }
 
-      cout<<myArduino->readString()<<std::endl;
+      cout << myArduino->readString() << std::endl;
 
     }
 
@@ -120,30 +125,6 @@ int main() {
   return 0;
 }
 
-void otomat() {
-  myArduino->step(150, 150);
-
-
-  /*myArduino->step(-1000, 240);
-  myArduino->step(1000, 0);
-
-  sleep(2);
-
-  myArduino->step(-1000, -240);
-  myArduino->step(1000, -240);
-  myArduino->step(-1000, 0);
-
-  sleep(3);*/
-
-}
-
-void run(ProcessImage &camera) {
-
-  for (int i = 0; i < 1000; i += 20) {
-  }
-
-
-}
 
 
 
