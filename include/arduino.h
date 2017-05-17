@@ -4,6 +4,7 @@
 #include "rs232.h"
 #include <iostream>
 #include "SerialPort.h"
+#include "../include/Requirements.h"
 #ifndef CSE396_RASP_ALI_RECOGNER_ARDUINO_H
 #define CSE396_RASP_ALI_RECOGNER_ARDUINO_H
 #define SERIALPORT 1

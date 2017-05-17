@@ -17,7 +17,7 @@ arduino::arduino(const std::string& port) {
     connected=false;
     xCor=0;
     yCor=0;
-    mySerial=new SerialPort(port,SerialPort::BR_115200);
+    mySerial=new SerialPort(port,SerialPort::BR_9600);
 }
 arduino::~arduino() {
 #ifdef RS232
@@ -39,8 +39,9 @@ bool arduino::connect() {
 #endif
 
 #ifdef SERIALPORT
-    mySerial->open();
-    std::cerr<<"Arduino connected\n";
+    if(mySerial->open())
+      std::cerr<<"Arduino connected\n";
+  else throw ArduinoConnectionExcepiton();
 
 #endif
     xCor=0;
@@ -203,15 +204,18 @@ void arduino::step(int xStep, int yStep) {
 
     }
     sprintf(buffer,"X=%d,Y=%d",xStep,yStep);
-   // std::cerr<<buffer<<std::endl;
+    std::cerr<<"Write Buffer: "<<buffer<<std::endl;
 #ifdef RS232
     std::cerr<<sendBuf((unsigned char*)buffer,strlen(buffer))<<std::endl;
     usleep(1102000);
 #endif
 #ifdef SERIALPORT
-    std::cerr<<mySerial->write(buffer)<<std::endl;
+    std::cerr<<"Write State:"<<mySerial->write(buffer)<<std::endl;
     memset(buffer,0,25);
-    mySerial->read(buffer);
+    std::string str;
+    int state = mySerial->readString(str);
+    printf("Read Buffer:%s-\n",str.c_str());
+    printf("Read State:%d\n",state);
     // TODO : CHECH EKSİK
 #endif
     std::cerr<<"GO:"<<buffer;

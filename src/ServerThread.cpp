@@ -19,10 +19,9 @@ void *serverJobs(void *args) {
   int XStep, YStep;
   arduino *myArduino = (arduino *)args;
 
-  fprintf(LOG_FD, "Thread started.");
+  fprintf(LOG_FD, "Server Thread started.");
 
   ConnectionHelper connectionHelper;
-
 
   try {
 

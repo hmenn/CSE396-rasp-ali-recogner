@@ -16,6 +16,13 @@ public:
     }
 };
 
+class ArduinoConnectionExcepiton: public exception{
+public:
+    const char *what()const throw(){
+      return "Arduino connection error";
+    }
+};
+
 
 typedef enum{
     CREATE_ERROR,
