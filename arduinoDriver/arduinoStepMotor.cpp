@@ -72,7 +72,7 @@ void arduinoStepMotor::steps(bool dir, unsigned int steps) {
 }
 
 void arduinoStepMotor::steps(int steps) {
-	char buffer[25];
+
     if(steps>=0){//pozitif
         digitalWrite(this->directionPin,HIGH);
         if(this->maxSteps>=steps+this->currentStep)
@@ -130,3 +130,4 @@ void arduinoStepMotor::enable() {
 void arduinoStepMotor::disable() {
     digitalWrite(this->enablePin,HIGH);//disable
 }
+

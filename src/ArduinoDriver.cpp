@@ -6,14 +6,6 @@
 
 using namespace std;
 
-ArduinoDriver::ArduinoDriver(const std::string &port, SerialPort::BaudRate baudRate) {
-  this->port = port;
-  this->baudRate = baudRate;
-  connected = false;
-  xCor = 0;
-  yCor = 0;
-  serialPort = NULL;
-}
 
 ArduinoDriver::ArduinoDriver(SerialPort::BaudRate baudRate) {
   this->port = "/dev/ttyUSB0";
@@ -56,7 +48,7 @@ void ArduinoDriver::disconnect() {
 
 
 void ArduinoDriver::step(int xStep, int yStep) {
-  char buffer[25];
+
   if (xStep > 0) {
     // alltakiler guvenlik amacli kaldirilabilir
     if (xMax >= xStep + xCor) {
@@ -79,9 +71,11 @@ void ArduinoDriver::step(int xStep, int yStep) {
     // alltakiler guvenlik amacli kaldirilabilir
     if (yMax >= yStep + yCor) {
       yCor += yStep;
+
     } else {
       yStep = yMax - yCor;
       yCor = yMax;
+
     }
   } else {
     if (yCor + yStep >= 0) {
@@ -91,7 +85,7 @@ void ArduinoDriver::step(int xStep, int yStep) {
       yCor = 0;
     }
   }
-
+  std::cerr<<"ycor="<<yCor<<" xcor"<<xCor;
   char msg[Constants::MAX_BUFFER_SIZE];
   bzero(msg, Constants::MAX_BUFFER_SIZE);
   sprintf(msg, "X=%d,Y=%d.", xStep, yStep);

@@ -13,8 +13,6 @@ class ArduinoDriver {
 public:
     ArduinoDriver(SerialPort::BaudRate baudRate);
 
-    ArduinoDriver(const std::string &port, SerialPort::BaudRate baudRate);
-
     ~ArduinoDriver();
 
     bool connect();
@@ -35,8 +33,8 @@ private:
     bool connected;
     int xCor;
     int yCor;
-    const int xMax = 700;
-    const int yMax = 480;
+    const int xMax = 920;//700
+    const int yMax = 610;//480
     SerialPort *serialPort;
 };
 
