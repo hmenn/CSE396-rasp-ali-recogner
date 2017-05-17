@@ -45,7 +45,7 @@ int main() {
 
     for(int i=0;i<200;++i){
       myArduino->step(75,0);
-      usleep(3000);
+      usleep(2000);
 
       cout<<myArduino->readString();
       if(processImage.takeImage(0,0)){

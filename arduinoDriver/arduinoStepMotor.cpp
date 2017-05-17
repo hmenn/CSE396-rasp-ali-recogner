@@ -95,9 +95,6 @@ void arduinoStepMotor::steps(int steps) {
             this->currentStep=0;
         }
     }
-
-    delay(10);
-
     for(int i=0;i<steps;++i){
         digitalWrite(this->stepperPin,HIGH);
         delayMicroseconds(this->speed);//bunda uzun  kalacak altta kısa bunlarıda default ayarlayıp adamın dısardan girdigi degere gore ayarla
