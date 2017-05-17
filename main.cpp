@@ -46,12 +46,16 @@ int main() {
     for(int i=0;i<200;++i){
       myArduino->step(75,0);
       usleep(3000);
+<<<<<<< Updated upstream
       cout<<myArduino->readString();
       if(processImage.takeImage(0,0)){
         cout<<"Angle:"<<processImage.rotasyon(processImage.getLastImage());
         cerr<<"Found"<<endl;
         break;
       }
+=======
+      cout<<myArduino->readString()<<std::endl;
+>>>>>>> Stashed changes
     }
 
 

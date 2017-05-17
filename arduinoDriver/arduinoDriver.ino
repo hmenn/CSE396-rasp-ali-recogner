@@ -32,8 +32,8 @@ void setup() {
   digitalWrite(X_STEP,LOW);
   pinMode(Y_STEP,OUTPUT);
   digitalWrite(Y_STEP,LOW);
-  stepMotorX.setSpeed(800);
-  stepMotorY.setSpeed(800); 
+  stepMotorX.setSpeed(500);
+  stepMotorY.setSpeed(500); 
   
  // while(!Serial);
 

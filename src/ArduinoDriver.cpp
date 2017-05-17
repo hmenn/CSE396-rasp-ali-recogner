@@ -85,8 +85,8 @@ void ArduinoDriver::step(int xStep, int yStep) {
       yCor = 0;
     }
   }
-    std::cerr<<"xStep= "<<xStep<<" xCor= "<<xCor<<std::endl;
-    std::cerr<<"yStep= "<<yStep<<" yCor= "<<yCor<<std::endl;
+  /*  std::cerr<<"xStep= "<<xStep<<" xCor= "<<xCor<<std::endl;
+    std::cerr<<"yStep= "<<yStep<<" yCor= "<<yCor<<std::endl;*/
   char msg[Constants::MAX_BUFFER_SIZE];
   bzero(msg, Constants::MAX_BUFFER_SIZE);
   sprintf(msg, "X=%d,Y=%d.", xStep, yStep);
