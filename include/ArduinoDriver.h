@@ -26,6 +26,8 @@ public:
     int getX() { return xCor; }
 
     int getY() { return yCor; }
+    int setX(int xCor){this->xCor=xCor;}
+    int setY(int yCor){this->yCor=yCor;}
 
 private:
     std::string port;
@@ -33,8 +35,8 @@ private:
     bool connected;
     int xCor;
     int yCor;
-    const int xMax = 920;//700
-    const int yMax = 610;//480
+    const int xMax = 700;//700
+    const int yMax = 520;//480
     SerialPort *serialPort;
 };
 

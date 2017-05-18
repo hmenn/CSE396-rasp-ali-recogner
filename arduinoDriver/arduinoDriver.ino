@@ -14,7 +14,6 @@
 
 arduinoStepMotor stepMotorX(MAXSTEPX,X_DIRECTION,X_STEP);
 arduinoStepMotor stepMotorY(MAXSTEPY,Y_DIRECTION,Y_STEP);
-char data[50]={0};
 
 void setup() {
 
@@ -32,8 +31,8 @@ void setup() {
   digitalWrite(X_STEP,LOW);
   pinMode(Y_STEP,OUTPUT);
   digitalWrite(Y_STEP,LOW);
-  stepMotorX.setSpeed(500);
-  stepMotorY.setSpeed(500); 
+  stepMotorX.setSpeed(700);
+  stepMotorY.setSpeed(700); 
   
  // while(!Serial);
 
@@ -45,8 +44,8 @@ bool makeHandshake(){
   ch = Serial.read();
   if(ch=='H'){
     Serial.write('C');
-     digitalWrite(X_ENABLE,LOW);
-      digitalWrite(Y_ENABLE,LOW);
+    digitalWrite(X_ENABLE,LOW);
+    digitalWrite(Y_ENABLE,LOW);
     return true;
   }else{
     return false;
@@ -71,10 +70,9 @@ void loop() {
         stepMotorX.steps(xStep);
         
         stepMotorY.steps(yStep);
-    
-        delay(100);
+        delay(10);
         Serial.write(msg.c_str());
-        delay(100);
+        delay(10);
         }
       }
     }    
