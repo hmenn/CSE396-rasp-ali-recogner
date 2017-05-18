@@ -12,108 +12,56 @@ pthread_t thServer;
 pthread_mutex_t mtxServer;
 ArduinoDriver *myArduino;
 
-
-void otomat();
+void otomat(ProcessImage& processImage);
 
 bool flag = false;
-
+bool finishFlag=false;
 int main() {
 
   try {
 
     ProcessImage processImage = ProcessImage::getInstance();
     processImage.openCamera(0);
-
-
-    string str;
     myArduino = new ArduinoDriver(SerialPort::BR_9600);
-    /*if (!myArduino->connect()) {
+    if (!myArduino->connect()) {
       return 0;
-    }*/
-
     pthread_create(&thServer, NULL, serverJobs, myArduino);
-
-    /*cout<<"Hand Shake completed!"<<endl;
-    myArduino->step(30,130);
-    usleep(3000);
-    cout<<myArduino->readString();*/
-
-
-    /*while(1){
-      processImage.takeImage(0,0);
-    }*/
-
-    while(1){
-      processImage.takeImage(0,0);
-      usleep(1000000);
     }
-
-    for (int i = 0; i < 200; ++i) {
-      myArduino->step(75, 0);
-      usleep(2000);
-
-      if (processImage.takeImage(0, 0)) {
-        cout << "Angle:" << processImage.rotasyon(processImage.getLastImage());
-        cerr << "Found" << endl;
-        break;
-      }
-
-      cout << myArduino->readString() << std::endl;
-
-    }
-
-
-
-
-    /*int fd = open("/dev/ttyUSB0",O_RDWR  );
-    if(fd ==-1){
-      perror("Arduino port open!");
-      exit(1);
-    }
-
-
-    char buf[25];
-    sprintf(buf,"X=250,Y=350");
-
-    int state =  write(fd,buf,strlen(buf));
-    printf("Write size:%d\n",state);
-    usleep(100000);
-
-    char buf2[25];
-    bzero(buf2,25);
-    int size = read(fd,buf2,25);
-    printf("Read size:%d - buf:%s\n",size,buf2);
-*/
-    return 0;
-
-
-    /*
-#ifdef RS232
-    myArduino = new arduino(16,115200);
-#endif
-
-#ifdef SERIALPORT
-    myArduino = new arduino("/dev/ttyUSB0");
-#endif
-    ProcessImage camera = ProcessImage::getInstance();
-    myArduino->connect();
-*/
-    otomat();
-    sleep(10);
-
-    /*camera.openCamera(0);
-    camera.takeImage(0, 0);
-    camera.writeToFile("/home/hmenn/Desktop/");
-*/
+      cout<<"Hand Shake completed!"<<endl;
+      myArduino->step(120,90);
+        myArduino->setX(0);
+      myArduino->setY(0);
+      usleep(3000);
+      cout<<myArduino->readString();
     //pthread_create(&thServer, NULL, serverJobs, myArduino);
-    // vision operations
-    // arduino connections
 
-    /*while (1) {
-      if (!flag)
-        otomat();
-      sleep(2);
-    }*/
+      while(1){
+          /*if(finishFlag)
+          {
+              myArduino->step(-5000,-5000);
+              usleep(3000);
+              cout<<myArduino->readString();
+              finishFlag=false;
+              sleep(2);
+          }*/
+          if(!flag && !finishFlag){
+              otomat(processImage);
+              cerr<<"cikti";
+          }
+          else {
+
+          }
+
+      }
+    for (int i = 0; i < 20; ++i) {
+        if (processImage.takeImage(myArduino->getX(), myArduino->getY())) {
+            cout << "Angle:" << processImage.rotasyon(processImage.getLastImage());
+            cerr << "Found" << endl;
+        }
+            break;
+        }
+
+    return 0;
 
     //  connectionHelper.writePort();
     //connectionHelper.openArdConnection();
@@ -121,20 +69,62 @@ int main() {
   } catch (exception &e) {
     cout << e.what();
   }
-
-  return 0;
 }
+void otomat(ProcessImage& processImage){
+    short int katsayi=1;
+    for (int j = 0; j < 5; ++j) {
+        if(j%2==1)
+            katsayi=-abs(katsayi);
+        else
+            katsayi=abs(katsayi);
 
+        for (int i = 0; i <= 9; ++i) {
+            if (processImage.takeImage(myArduino->getX(), myArduino->getY())) {
+                cerr << "Angle:" << processImage.rotasyon(processImage.getLastImage());
+                cerr << "Found" << endl;
+                finishFlag = true;
+                myArduino->step((-katsayi*75),0);
+                usleep(2000);
+                cout << myArduino->readString();
+                break;
+            }
+            if(finishFlag)
+                return;
+            myArduino->step((katsayi*70), 0);
+            usleep(2000);
+            cout << myArduino->readString();
+        }
 
+        if (processImage.takeImage(myArduino->getX(), myArduino->getY())) {
+            cerr << "Angle:" << processImage.rotasyon(processImage.getLastImage());
+            cerr << "Found" << endl;
+            finishFlag = true;
+            myArduino->step((-katsayi*75),0);
+            usleep(2000);
+            cout << myArduino->readString();
+            break;
+        }
+        if(finishFlag)
+            return;
 
-
-
-
-
-
-
-
-
-
-
-
+        myArduino->step(0, 125);
+        usleep(2000);
+        cout << myArduino->readString();
+        if (processImage.takeImage(myArduino->getX(), myArduino->getY())) {
+            cout << "Angle:" << processImage.rotasyon(processImage.getLastImage());
+            cerr << "Found" << endl;
+            finishFlag = true;
+            myArduino->step(0,-125);
+            usleep(2000);
+            cout << myArduino->readString();
+            break;
+        }
+        if(finishFlag)
+            return;
+    }
+    finishFlag=false;
+    myArduino->step(-7000,-7000);
+    usleep(1000);
+    cout<<myArduino->readString();
+    return;
+}

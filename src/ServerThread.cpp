@@ -128,6 +128,7 @@ void *serverJobs(void *args) {
             } else {
               fprintf(LOG_FD, "Manual mode closed!\n");
               flag = false;
+              finishFlag=false;
             }
             //connectionHelper.writeSocket("OK");
             // CLOSE ARDUINO CONTROL FROM IMAGE PROCESS

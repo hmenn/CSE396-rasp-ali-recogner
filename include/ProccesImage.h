@@ -24,7 +24,7 @@ private:
     }
 
     vector<Frame> frameList;  // filterli resim
-    vector<Frame> realFrameL;
+
 
     bool foundFlag = false;
     /**
@@ -63,7 +63,7 @@ private:
 
 public:
     static ProcessImage &getInstance();
-
+    vector<Frame> realFrameL;
     void writeToFile(string path);
 
     Mat concatImage();
@@ -94,9 +94,9 @@ public:
 
     void setTakeImageFlag(bool flag);
 
-    int rotasyon(Mat src);
+    int rotasyon(Mat& src);
 
-    Mat getLastImage(){
+    Mat& getLastImage(){
       return realFrameL[realFrameL.size()-1].getImage();
     }
 

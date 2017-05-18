@@ -14,6 +14,6 @@
 
 #define LOG_FD stdout
 extern bool flag;
-extern Frame *fm;
-
+extern Frame fm;
+extern bool finishFlag;
 #endif
