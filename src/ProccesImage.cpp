@@ -1,6 +1,7 @@
 //
 // Created by sveyda on 23.03.2017.
 //
+#include <zconf.h>
 #include "../include/ProccesImage.h"
 
 RNG rng(12345);
@@ -18,6 +19,9 @@ void ProcessImage::openCamera(int cid) {
   camera.set(CV_CAP_PROP_FPS, 30);
   if (!camera.isOpened())
     throw -1;
+
+   // sleep(1);
+
 }
 
 /*
@@ -25,22 +29,22 @@ void ProcessImage::openCamera(int cid) {
  */
 bool ProcessImage::takeImage(int xCor, int yCor) {
   camera >> frame;
-  //Frame real = Frame(xCor, yCor, frame);
-  //realFrameL.push_back(real);
-  fm = Frame(0, 0, frame);
-  imshow("pen", frame);
-  waitKey(5);
+  Frame real = Frame(xCor, yCor, frame);
+  realFrameL.push_back(real);
+ // fm = Frame(0, 0, frame);
+ // imshow("pen", frame);
+  //waitKey(5);
   //rotasyon(frame);
   /*while(1) {
     camera >> frame;
     imshow("pen", frame);
     waitKey(5);
   }*/
-  return false;
-  //return detectStickMan(frame);
+  //return false;
+  return detectStickMan(frame);
 }
 
-int ProcessImage::rotasyon(Mat src) {
+int ProcessImage::rotasyon(Mat& src) {
   double angle = -1;
   vector<vector<Point> > contours;
   vector<Vec4i> hierarchy;
@@ -49,8 +53,8 @@ int ProcessImage::rotasyon(Mat src) {
   GaussianBlur(src, src, Size(3, 3), 2);
   Canny(src, binaryMat, 40, 120, 3);
   dilate(binaryMat, binaryMat, getStructuringElement(MORPH_RECT, Size(5, 5)));
-  imshow("binary", binaryMat);
-  waitKey(5);
+  /*imshow("binary", binaryMat);
+  waitKey(1);*/
   /// Find contours
   findContours(binaryMat, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
 
@@ -145,16 +149,17 @@ int ProcessImage::rotasyon(Mat src) {
       for (int j = 0; j < 4; j++)
         line(drawing, rect_points[j], rect_points[(j + 1) % 4], Scalar(0, 0, 255), 1, 8);
     }
-    /// Show in a window
-    namedWindow("Contours", CV_WINDOW_AUTOSIZE);
-    imshow("Contours", drawing);
 
     if (angle == -1) {
       //cout << "angle : " << abs(minRect[index].angle) << endl;
       angle = abs(minRect[index].angle) + plusAngle;
       //cout << "angle : " << abs(minRect[index].angle) << " plusAngle : " << plusAngle << endl;
     }
-    cout << "**********  angle : " << (int) angle << "  **********" << endl;
+    cerr << "**********  angle : " << (int) angle << "  **********" << endl;
+      /// Show in a window
+      namedWindow("Contours", CV_WINDOW_AUTOSIZE);
+      imshow("Contours", drawing);
+      waitKey(100);
     return angle;
   } else {
     //cerr << "No angle" << endl;
@@ -172,7 +177,8 @@ int ProcessImage::rotasyon(Mat src) {
     }
     /// Show in a window
     namedWindow("Contours", CV_WINDOW_AUTOSIZE);
-    imshow("Contours", drawing);
+      imshow("Contours", drawing);
+      waitKey(1000);
     return -1;
   }
   return -1;
@@ -205,7 +211,7 @@ void ProcessImage::SobelFilter(Mat &image1) {
 
 bool ProcessImage::detectStickMan(Mat& src) {
   cerr<<"Here"<<endl;
-  /*vector<vector<Point> > contours;
+  vector<vector<Point> > contours;
   vector<Vec4i> hierarchy;
 
   //filters
@@ -213,10 +219,11 @@ bool ProcessImage::detectStickMan(Mat& src) {
   GaussianBlur(src, src, Size(3, 3), 2);
   Canny(src, binaryMat, 40, 120, 3);
 
-  dilate(binaryMat, binaryMat, getStructuringElement(MORPH_RECT, Size(5, 5)));*/
-  imshow("binary", src);
-  waitKey(5);
- /* /// Find contours
+  dilate(binaryMat, binaryMat, getStructuringElement(MORPH_RECT, Size(5, 5)));
+  //imshow("binary", src);
+  //waitKey(1);
+
+  /// Find contours
   findContours(binaryMat, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0));
 
   /// Find the rotated rectangles and ellipses for each contour
@@ -278,7 +285,7 @@ bool ProcessImage::detectStickMan(Mat& src) {
       return true;
     }
     return false;
-  }*/
+  }
   return false;
 }
 
