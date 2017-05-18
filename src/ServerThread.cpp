@@ -20,7 +20,7 @@ void *serverJobs(void *args) {
     int XStep, YStep;
     ArduinoDriver *myArduino = (ArduinoDriver *) args;
 
-    fprintf(LOG_FD, "Server Thread started.");
+  //  fprintf(LOG_FD, "Server Thread started.");
 
     ConnectionHelper connectionHelper;
 
@@ -29,7 +29,7 @@ void *serverJobs(void *args) {
         while (1) {
 
             socketFD = connectionHelper.acceptConnection();
-            fprintf(LOG_FD, "Thread connected socketfd:%d\n", socketFD);
+            //fprintf(LOG_FD, "Thread connected socketfd:%d\n", socketFD);
             run = 1;
 
             msg = connectionHelper.readSocket(Constants::COMMAND_MSG_SIZE);
@@ -42,16 +42,16 @@ void *serverJobs(void *args) {
 
 
             while (run) {
-                usleep(300000);
+                usleep(400000);
                 msg = connectionHelper.readSocket(Constants::COMMAND_MSG_SIZE);
                 //cerr << "deneme" << msg << endl;
 
                 sscanf(msg, "%d", &command);
-                fprintf(LOG_FD, "-->Command:%d\n", command);
+                //fprintf(LOG_FD, "-->Command:%d\n", command);
                 switch (command) {
                     case Constants::REQ_CLOSE_CONNECTION: {
                         connectionHelper.releaseConnection();
-                        fprintf(LOG_FD, "Client connection closed.\n");
+                        //fprintf(LOG_FD, "Client connection closed.\n");
                         run = false;
                         break;
                     }
@@ -104,11 +104,12 @@ void *serverJobs(void *args) {
                         int y = myArduino->getY();
                         char buffer[Constants::MIN_BUFFER_SIZE];
                         bzero(buffer, Constants::MIN_BUFFER_SIZE);
-                        if (!finishFlag)
+                        sprintf(buffer, "%d,%d.", x, y);
+                        /*if (!finishFlag)
                             sprintf(buffer, "%d,%d,%d.", x, y,-1);
-                        else sprintf(buffer, "%d,%d,%d", x, y, foundAngle);
+                        else sprintf(buffer, "%d,%d,%d.", x, y, foundAngle);*/
                         int size = connectionHelper.writeSocket(buffer);
-                        fprintf(LOG_FD, "SocketWriteSize:%d\n", size);
+                        //fprintf(LOG_FD, "SocketWriteSize:%d\n", size);
                         break;
                     }
                     case Constants::REQ_UPDATE_COORDS: {
@@ -118,17 +119,17 @@ void *serverJobs(void *args) {
                         //  connectionHelper.writeSocket("OK");
                         myArduino->step(XStep, YStep);
                         usleep(3000);
-                        cout << myArduino->readString();
+                       // cout << myArduino->readString();
                         break;
                     }
                     case Constants::REQ_MANUAL_MODE: {
                         int mode;
                         sscanf(msg, "%d%c%d", &tempI, &tempCh, &mode);
                         if (mode) {
-                            fprintf(LOG_FD, "Manual mode opened!\n");
+                           // fprintf(LOG_FD, "Manual mode opened!\n");
                             flag = true;
                         } else {
-                            fprintf(LOG_FD, "Manual mode closed!\n");
+                            //fprintf(LOG_FD, "Manual mode closed!\n");
                             flag = false;
                             finishFlag = false;
                         }

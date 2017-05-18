@@ -91,7 +91,7 @@ void ArduinoDriver::step(int xStep, int yStep) {
   bzero(msg, Constants::MAX_BUFFER_SIZE);
   sprintf(msg, "X=%d,Y=%d.", xStep, yStep);
   while (!serialPort->writeString(msg));
-  std::cout << "Write Complete" << std::endl;
+  //std::cout << "Write Complete" << std::endl;
 }
 
 string ArduinoDriver::readString() {
