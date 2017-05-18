@@ -49,7 +49,7 @@ int main() {
           }*/
           if(!flag && !finishFlag){
               otomat(processImage);
-              realFrameL.clear();
+              //realFrameL.clear();
              // cerr<<"cikti";
           }
           else {
@@ -88,12 +88,20 @@ void otomat(ProcessImage& processImage){
 
             if (processImage.takeImage(myArduino->getX(), myArduino->getY())) {
                 foundAngle =  processImage.rotasyon(processImage.getLastImage());
+                if(foundAngle==-1){
+                    sleep(1);
+                    if (processImage.takeImage(myArduino->getX(), myArduino->getY())) {
+                        foundAngle =  processImage.rotasyon(processImage.getLastImage());} else{
+                        continue;
+                    }
+
+                }
                 cerr << "Angle:" << foundAngle;
                 cerr << "Found" << endl;
 
-                myArduino->step((-katsayi*75),0);
+              /*  myArduino->step((-katsayi*75),0);
                 usleep(2000);
-                cout << myArduino->readString();
+                cout << myArduino->readString();*/
                 finishFlag = true;
                 break;
             }
@@ -108,9 +116,9 @@ void otomat(ProcessImage& processImage){
             cerr << "Angle:" << processImage.rotasyon(processImage.getLastImage());
             cerr << "Found" << endl;
 
-            myArduino->step((-katsayi*75),0);
+           /* myArduino->step((-katsayi*75),0);
             usleep(2000);
-            cout << myArduino->readString();
+            cout << myArduino->readString();*/
             finishFlag = true;
             break;
         }
@@ -123,17 +131,17 @@ void otomat(ProcessImage& processImage){
         if (processImage.takeImage(myArduino->getX(), myArduino->getY())) {
             cout << "Angle:" << processImage.rotasyon(processImage.getLastImage());
             cerr << "Found" << endl;
-
+/*
             myArduino->step(0,-125);
             usleep(2000);
-            cout << myArduino->readString();
+            cout << myArduino->readString();*/
             finishFlag = true;
             break;
         }
         if(finishFlag)
             return;
     }
-    finishFlag=false;
+    //finishFlag=false;
     //myArduino->step(-7000,-7000);
     //usleep(1000);
     //cout<<myArduino->readString();

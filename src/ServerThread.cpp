@@ -104,10 +104,10 @@ void *serverJobs(void *args) {
                         int y = myArduino->getY();
                         char buffer[Constants::MIN_BUFFER_SIZE];
                         bzero(buffer, Constants::MIN_BUFFER_SIZE);
-                        sprintf(buffer, "%d,%d.", x, y);
-                        /*if (!finishFlag)
+                        //sprintf(buffer, "%d,%d.", x, y);
+                        if (!finishFlag)
                             sprintf(buffer, "%d,%d,%d.", x, y,-1);
-                        else sprintf(buffer, "%d,%d,%d.", x, y, foundAngle);*/
+                        else sprintf(buffer, "%d,%d,%d.", x, y, foundAngle);
                         int size = connectionHelper.writeSocket(buffer);
                         //fprintf(LOG_FD, "SocketWriteSize:%d\n", size);
                         break;
@@ -119,7 +119,7 @@ void *serverJobs(void *args) {
                         //  connectionHelper.writeSocket("OK");
                         myArduino->step(XStep, YStep);
                         usleep(3000);
-                       // cout << myArduino->readString();
+                       cout << myArduino->readString();
                         break;
                     }
                     case Constants::REQ_MANUAL_MODE: {

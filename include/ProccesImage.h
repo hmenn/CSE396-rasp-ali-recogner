@@ -97,7 +97,9 @@ public:
     int rotasyon(Mat& src);
 
     Mat& getLastImage(){
-      return realFrameL[realFrameL.size()-1].getImage();
+        if(realFrameL.size()>0)
+            return realFrameL[realFrameL.size()-1].getImage();
+
     }
 
     /**
