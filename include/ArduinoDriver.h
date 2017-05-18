@@ -27,6 +27,9 @@ public:
 
     int getY() { return yCor; }
 
+    void setX(int x){this->xCor=x;}
+    void setY(int y){this->yCor=y;}
+
 private:
     std::string port;
     SerialPort::BaudRate baudRate;

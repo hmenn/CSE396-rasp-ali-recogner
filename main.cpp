@@ -45,7 +45,7 @@ int main() {
 
     while(1){
       processImage.takeImage(0,0);
-      usleep(5000);
+      usleep(1000000);
     }
 
     for (int i = 0; i < 200; ++i) {

@@ -10,7 +10,7 @@ ProcessImage &ProcessImage::getInstance() {
   return INSTANCE; //Ilk seferde initialize e
 }
 
-Frame fm;
+Frame *fm;
 
 void ProcessImage::openCamera(int cid) {
 
@@ -26,9 +26,9 @@ void ProcessImage::openCamera(int cid) {
 bool ProcessImage::takeImage(int xCor, int yCor) {
   camera >> frame;
   //Frame real = Frame(xCor, yCor, frame);
-  //realFrameL.push_back(real);
-  fm = Frame(0, 0, frame);
-  imshow("pen", frame);
+  //realFramemmL.push_back(real);
+  fm = new Frame(0, 0, frame);
+ // imshow("pen", fm->getImage());
   waitKey(5);
   //rotasyon(frame);
   /*while(1) {

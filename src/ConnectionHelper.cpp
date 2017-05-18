@@ -14,6 +14,11 @@ ConnectionHelper::ConnectionHelper() {
     throw SocketCreationException(CREATE_ERROR);
   }
 
+  int a = 1;
+
+  /*Set socket option to reusable*/
+  setsockopt(serverfd, SOL_SOCKET, SO_REUSEADDR, &a, sizeof (int));
+
   bzero((char *) &serv_addr, sizeof(serv_addr));
   serv_addr.sin_family = AF_INET;
   serv_addr.sin_port = htons(Constants::PORT);
@@ -69,6 +74,15 @@ char *ConnectionHelper::readSocket(int byte) {
 int ConnectionHelper::writeSocket(const char *msg) {
   int size;
   if ((size = write(socketfd, msg, strlen(msg))) < 0) {
+    perror("write socket");
+    throw InvalidConnectionException();
+  }
+  return size;
+}
+
+int ConnectionHelper::writeSocket1(char* msg) {
+  int size;
+  if ((size = write(socketfd, msg, sizeof(char))) < 0) {
     perror("write socket");
     throw InvalidConnectionException();
   }

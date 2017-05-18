@@ -18,6 +18,7 @@ public:
 
     char *readSocket(int byte);
     int writeSocket(const char *msg);
+    int writeSocket1(char* msg);
     int acceptConnection();
     void releaseConnection();
     void startRemoteServer();

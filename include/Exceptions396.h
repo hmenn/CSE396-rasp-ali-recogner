@@ -23,7 +23,6 @@ public:
     }
 };
 
-
 typedef enum{
     CREATE_ERROR,
     BINDING_ERROR,
@@ -36,7 +35,6 @@ public:
     SocketCreationException(int error){
       this->err=(SocketError)error;
     }
-
     const char *what()const throw(){
       switch (this->err){
         case CREATE_ERROR:
