@@ -5,7 +5,7 @@
 #include "../include/ProccesImage.h"
 
 RNG rng(12345);
-
+vector<Frame> realFrameL;
 ProcessImage &ProcessImage::getInstance() {
   static ProcessImage INSTANCE;
   return INSTANCE; //Ilk seferde initialize e
@@ -176,9 +176,9 @@ int ProcessImage::rotasyon(Mat& src) {
         line(drawing, rect_points[j], rect_points[(j + 1) % 4], Scalar(0, 0, 255), 1, 8);
     }
     /// Show in a window
-    namedWindow("Contours", CV_WINDOW_AUTOSIZE);
-      imshow("Contours", drawing);
-      waitKey(1000);
+  //  namedWindow("Contours", CV_WINDOW_AUTOSIZE);
+    //  imshow("Contours", drawing);
+     // waitKey(1000);
     return -1;
   }
   return -1;

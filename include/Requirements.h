@@ -16,4 +16,5 @@
 extern bool flag;
 extern Frame fm;
 extern bool finishFlag;
+extern int foundAngle;
 #endif

@@ -29,8 +29,7 @@ public:
     int setX(int xCor){this->xCor=xCor;}
     int setY(int yCor){this->yCor=yCor;}
 
-    void setX(int x){this->xCor=x;}
-    void setY(int y){this->yCor=y;}
+
 
 private:
     std::string port;

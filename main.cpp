@@ -12,6 +12,8 @@ pthread_t thServer;
 pthread_mutex_t mtxServer;
 ArduinoDriver *myArduino;
 
+int foundAngle;
+
 void otomat(ProcessImage& processImage);
 
 bool flag = false;
@@ -25,9 +27,10 @@ int main() {
     myArduino = new ArduinoDriver(SerialPort::BR_9600);
     if (!myArduino->connect()) {
       return 0;
-    pthread_create(&thServer, NULL, serverJobs, myArduino);
+
     }
       cout<<"Hand Shake completed!"<<endl;
+      pthread_create(&thServer, NULL, serverJobs, myArduino);
       myArduino->step(120,90);
         myArduino->setX(0);
       myArduino->setY(0);
@@ -46,9 +49,12 @@ int main() {
           }*/
           if(!flag && !finishFlag){
               otomat(processImage);
-              cerr<<"cikti";
+              realFrameL.clear();
+             // cerr<<"cikti";
           }
           else {
+
+
 
           }
 
@@ -79,13 +85,16 @@ void otomat(ProcessImage& processImage){
             katsayi=abs(katsayi);
 
         for (int i = 0; i <= 9; ++i) {
+
             if (processImage.takeImage(myArduino->getX(), myArduino->getY())) {
-                cerr << "Angle:" << processImage.rotasyon(processImage.getLastImage());
+                foundAngle =  processImage.rotasyon(processImage.getLastImage());
+                cerr << "Angle:" << foundAngle;
                 cerr << "Found" << endl;
-                finishFlag = true;
+
                 myArduino->step((-katsayi*75),0);
                 usleep(2000);
                 cout << myArduino->readString();
+                finishFlag = true;
                 break;
             }
             if(finishFlag)
@@ -98,10 +107,11 @@ void otomat(ProcessImage& processImage){
         if (processImage.takeImage(myArduino->getX(), myArduino->getY())) {
             cerr << "Angle:" << processImage.rotasyon(processImage.getLastImage());
             cerr << "Found" << endl;
-            finishFlag = true;
+
             myArduino->step((-katsayi*75),0);
             usleep(2000);
             cout << myArduino->readString();
+            finishFlag = true;
             break;
         }
         if(finishFlag)
@@ -113,18 +123,19 @@ void otomat(ProcessImage& processImage){
         if (processImage.takeImage(myArduino->getX(), myArduino->getY())) {
             cout << "Angle:" << processImage.rotasyon(processImage.getLastImage());
             cerr << "Found" << endl;
-            finishFlag = true;
+
             myArduino->step(0,-125);
             usleep(2000);
             cout << myArduino->readString();
+            finishFlag = true;
             break;
         }
         if(finishFlag)
             return;
     }
     finishFlag=false;
-    myArduino->step(-7000,-7000);
-    usleep(1000);
-    cout<<myArduino->readString();
+    //myArduino->step(-7000,-7000);
+    //usleep(1000);
+    //cout<<myArduino->readString();
     return;
 }

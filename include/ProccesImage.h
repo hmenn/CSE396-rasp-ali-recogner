@@ -15,7 +15,7 @@
 
 using namespace cv;
 using namespace std;
-
+extern vector<Frame> realFrameL;
 class ProcessImage {
 
 private:
@@ -63,7 +63,7 @@ private:
 
 public:
     static ProcessImage &getInstance();
-    vector<Frame> realFrameL;
+
     void writeToFile(string path);
 
     Mat concatImage();
