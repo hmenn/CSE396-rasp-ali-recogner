@@ -157,9 +157,9 @@ int ProcessImage::rotasyon(Mat& src) {
     }
     cerr << "**********  angle : " << (int) angle << "  **********" << endl;
       /// Show in a window
-      namedWindow("Contours", CV_WINDOW_AUTOSIZE);
-      imshow("Contours", drawing);
-      waitKey(100);
+      //namedWindow("Contours", CV_WINDOW_AUTOSIZE);
+      //imshow("Contours", drawing);
+      //waitKey(100);
     return angle;
   } else {
     //cerr << "No angle" << endl;

@@ -78,6 +78,7 @@ int main() {
 }
 void otomat(ProcessImage& processImage){
     short int katsayi=1;
+    int a;
     for (int j = 0; j < 5; ++j) {
         if(j%2==1)
             katsayi=-abs(katsayi);
@@ -87,15 +88,11 @@ void otomat(ProcessImage& processImage){
         for (int i = 0; i <= 9; ++i) {
 
             if (processImage.takeImage(myArduino->getX(), myArduino->getY())) {
-                foundAngle =  processImage.rotasyon(processImage.getLastImage());
-                if(foundAngle==-1){
-                    sleep(1);
-                    if (processImage.takeImage(myArduino->getX(), myArduino->getY())) {
-                        foundAngle =  processImage.rotasyon(processImage.getLastImage());} else{
-                        continue;
-                    }
-
-                }
+                a =  processImage.rotasyon(processImage.getLastImage());
+                 if(a>0)
+                     foundAngle=a;
+                else
+                     foundAngle=0;
                 cerr << "Angle:" << foundAngle;
                 cerr << "Found" << endl;
 
@@ -113,9 +110,14 @@ void otomat(ProcessImage& processImage){
         }
 
         if (processImage.takeImage(myArduino->getX(), myArduino->getY())) {
-            cerr << "Angle:" << processImage.rotasyon(processImage.getLastImage());
-            cerr << "Found" << endl;
+            a=processImage.rotasyon(processImage.getLastImage());
 
+            if(a>0)
+                foundAngle=a;
+            else
+                foundAngle=0;
+            cerr << "Angle:" << foundAngle;
+            cerr << "Found" << endl;
            /* myArduino->step((-katsayi*75),0);
             usleep(2000);
             cout << myArduino->readString();*/
@@ -129,7 +131,13 @@ void otomat(ProcessImage& processImage){
         usleep(2000);
         cout << myArduino->readString();
         if (processImage.takeImage(myArduino->getX(), myArduino->getY())) {
-            cout << "Angle:" << processImage.rotasyon(processImage.getLastImage());
+            a=processImage.rotasyon(processImage.getLastImage());
+
+            if(a>0)
+                foundAngle=a;
+            else
+                foundAngle=0;
+            cerr << "Angle:" << foundAngle;
             cerr << "Found" << endl;
 /*
             myArduino->step(0,-125);

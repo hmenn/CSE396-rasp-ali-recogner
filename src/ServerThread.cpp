@@ -42,7 +42,7 @@ void *serverJobs(void *args) {
 
 
             while (run) {
-                usleep(400000);
+                usleep(500000);
                 msg = connectionHelper.readSocket(Constants::COMMAND_MSG_SIZE);
                 //cerr << "deneme" << msg << endl;
 
@@ -107,7 +107,7 @@ void *serverJobs(void *args) {
                         //sprintf(buffer, "%d,%d.", x, y);
                         if (!finishFlag)
                             sprintf(buffer, "%d,%d,%d.", x, y,-1);
-                        else sprintf(buffer, "%d,%d,%d.", x, y, foundAngle);
+                        else {sprintf(buffer, "%d,%d,%d.", x, y, foundAngle); foundAngle=-1;}
                         int size = connectionHelper.writeSocket(buffer);
                         //fprintf(LOG_FD, "SocketWriteSize:%d\n", size);
                         break;
@@ -128,6 +128,7 @@ void *serverJobs(void *args) {
                         if (mode) {
                            // fprintf(LOG_FD, "Manual mode opened!\n");
                             flag = true;
+                            realFrameL.clear();
                         } else {
                             //fprintf(LOG_FD, "Manual mode closed!\n");
                             flag = false;
