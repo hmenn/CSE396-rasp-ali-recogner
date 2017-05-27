@@ -23,7 +23,7 @@ int main() {
   try {
 
     ProcessImage processImage = ProcessImage::getInstance();
-    processImage.openCamera(0);
+    processImage.openCamera(1);
     myArduino = new ArduinoDriver(SerialPort::BR_9600);
     if (!myArduino->connect()) {
       return 0;
@@ -143,9 +143,12 @@ void otomat(ProcessImage& processImage){
         if(finishFlag)
             return;
     }
-    //finishFlag=false;
-    //myArduino->step(-7000,-7000);
-    //usleep(1000);
-    //cout<<myArduino->readString();
+  if(finishFlag)
+    return;
+  //finishFlag=true;
+  myArduino->step(-7000,-7000);
+  usleep(2000);
+  cout<<myArduino->readString();
+
     return;
 }
