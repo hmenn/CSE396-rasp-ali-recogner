@@ -29,15 +29,17 @@ bool ArduinoDriver::connect() {
     serialPort->setPortName("/dev/ttyUSB1");
     if (!serialPort->open()) {
       cout << "Unable to connect /dev/ttyUSB1" << endl;
+        connected=false;
       return false;
     }
   }
   if (!(serialPort->prepare())) {
     usleep(100);
     cerr << "Prepare failed" << endl;
+      connected=false;
     return false;
   }
-
+    connected=true;
   return serialPort->makeHandshake();
 }
 
@@ -85,40 +87,50 @@ int tempX=xCor,tempY=yCor;
       yCor = 0;
     }
   }*/
-    if (xStep > 0) {
-        // alltakiler guvenlik amacli kaldirilabilir
-        if (xMax >= xStep + xCor) {
-            tempX += xStep;
-        } else {
-            xStep = xMax - xCor;
-            tempX = xMax;
-        }
-    } else {
-
-        if (xCor + xStep >= 0) {
-            tempX += xStep;
-        } else {
-            xStep = -xCor;
-            tempX = 0;
-        }
-
+    if(xStep==-5987 && yStep==-5987){
+        xCor=0;
+        yCor=0;
+        tempX=0;
+        tempY=0;
     }
-    if (yStep > 0) {
-        // alltakiler guvenlik amacli kaldirilabilir
-        if (yMax >= yStep + yCor) {
-            tempY += yStep;
 
+        else
+    {
+        if (xStep > 0) {
+            // alltakiler guvenlik amacli kaldirilabilir
+            if (xMax >= xStep + xCor) {
+                tempX += xStep;
+            } else {
+                xStep = xMax - xCor;
+                tempX = xMax;
+            }
         } else {
-            yStep = yMax - yCor;
-            tempY = yMax;
+
+            if (xCor + xStep >= 0) {
+                tempX += xStep;
+            } else {
+                xStep = -xCor;
+                tempX = 0;
+            }
 
         }
-    } else {
-        if (yCor + yStep >= 0) {
-            tempY += yStep;
+        if (yStep > 0) {
+            // alltakiler guvenlik amacli kaldirilabilir
+            if (yMax >= yStep + yCor) {
+                tempY += yStep;
+
+            } else {
+                yStep = yMax - yCor;
+                tempY = yMax;
+
+            }
         } else {
-            yStep = -yCor;
-            tempY = 0;
+            if (yCor + yStep >= 0) {
+                tempY += yStep;
+            } else {
+                yStep = -yCor;
+                tempY = 0;
+            }
         }
     }
   /*  std::cerr<<"xStep= "<<xStep<<" xCor= "<<xCor<<std::endl;

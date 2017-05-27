@@ -62,7 +62,7 @@ void *serverJobs(void *args) {
 
                         vector<int> compressionParams;
                         compressionParams.push_back((int &&) CV_IMWRITE_JPEG_QUALITY);
-                        compressionParams.push_back(50);
+                        compressionParams.push_back(25);
 
                         // param[0] = cv::IMWRITE_JPEG_QUALITY;
                         // param[1] = 50;//default(95) 0-100
@@ -128,7 +128,13 @@ void *serverJobs(void *args) {
                         if (mode) {
                            // fprintf(LOG_FD, "Manual mode opened!\n");
                             flag = true;
+                            pthread_mutex_lock(&realFrameClearMutex);
+                            Frame temp=realFrameL.at(realFrameL.size()-1);
+                            realFrameL.pop_back();
                             realFrameL.clear();
+                            realFrameL.push_back(temp);
+                            pthread_mutex_unlock(&realFrameClearMutex);
+
                         } else {
                             //fprintf(LOG_FD, "Manual mode closed!\n");
                             flag = false;

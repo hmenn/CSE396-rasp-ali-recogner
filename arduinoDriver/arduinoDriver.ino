@@ -66,7 +66,15 @@ void loop() {
         String msg= Serial.readString();
         
         sscanf(msg.c_str(),"%c%c%d%c%c%c%d",&ch,&ch,&xStep,&ch,&ch,&ch,&yStep);
-      
+        if(xStep==-5987 && yStep==-5987){
+          stepMotorX.steps(xStep);
+        
+        stepMotorY.steps(yStep);
+        delay(10);
+        xStep=120;
+        yStep=90;
+       
+        }    
         stepMotorX.steps(xStep);
         
         stepMotorY.steps(yStep);

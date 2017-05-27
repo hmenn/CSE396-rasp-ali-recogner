@@ -14,6 +14,7 @@
 
 #define LOG_FD stdout
 extern bool flag;
+extern pthread_mutex_t realFrameClearMutex;
 extern Frame fm;
 extern bool finishFlag;
 extern int foundAngle;
