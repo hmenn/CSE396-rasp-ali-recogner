@@ -132,7 +132,8 @@ void *serverJobs(void *args) {
             if (mode) {
               // fprintf(LOG_FD, "Manual mode opened!\n");
               flag = true;
-              pthread_mutex_lock(&realFrameClearMutex);
+               
+              pthread_mutex_trylock(&realFrameClearMutex);
               Frame temp = realFrameL.at(realFrameL.size() - 1);
               realFrameL.pop_back();
               realFrameL.clear();
